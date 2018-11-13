@@ -43,6 +43,15 @@
           <label for="nombre">Celular referencia *</label>
           <input required type="text" class="form-control" value="{{$persona->referencia_celular}}" name ="referencia_celular">
         </div>
+      <div class="form-group">
+          <label for="nombre">Descuento %</label>
+          <select class="form-control" name = "descuento" >
+          <option <?php  echo ($persona->descuento == 0) ? 'selected':'';   ?> value="0">0%</option>   
+          <option <?php  echo ($persona->descuento == 10) ? 'selected':'';   ?> value="10">10%</option>   
+          <option <?php  echo ($persona->descuento == 15) ? 'selected':'';   ?> value="15">15%</option>   
+                      
+          </select>
+        </div>
         <input type="hidden"   type="text" class="form-control"  value="{{$persona->sexo}}" name ="sexo">
         <input type="hidden" value="c"  type="text" class="form-control"  name ="tipo">
         <input type="hidden"   type="text" class="form-control"  name ="telefono_emergencia">

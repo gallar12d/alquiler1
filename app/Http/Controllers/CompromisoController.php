@@ -29,7 +29,7 @@ class CompromisoController extends Controller {
 
     public function index() {
 
-        $compromisos = Compromiso::all();
+        $compromisos = Compromiso::take('1')->orderBy('id_compromiso', 'desc')->get();
         return view('compromiso.index', compact('compromisos'));
     }
 
@@ -57,6 +57,17 @@ class CompromisoController extends Controller {
         $saldo = $data->input('saldo');
         $id_cliente = $data->input('id_cliente');
         $productos = $data->input('productos');
+        $descuento = $data->input('descuento');
+
+        if ($descuento == 0) {
+            //modificar el usuario y poner el descuento en 0
+            $userModificarDescuento = Persona::where('cedula', $id_cliente)->first();
+            $userModificarDescuento->descuento = 0;
+            $userModificarDescuento->save();
+            
+        }
+        
+      
         $banderaCompromiso = false;
         $cliente2 = Persona::where('cedula', $id_cliente)->first();
 
@@ -209,6 +220,9 @@ class CompromisoController extends Controller {
                         if (isset($saldo) && isset($abono)) {
                             $total2 = intval($abono) + intval($saldo);
                         }
+
+                        
+
 
                         $this->crearRecibo2($nombreCliente, $direccionCliente, $referenciaCliente, $cedulaCliente, $fechaHoy, $fechaComp, $abono2, $saldo2, $total2, $fechaDev, $facturaNumero2, $telefonoCliente, $celularCliente, $productosRecibo);
 //                        $this->crearRecibo($url, $factura, $cliente, $valorTotal, $valorAbono, $valorSaldo, $fecha, $concepto);
@@ -471,13 +485,12 @@ class CompromisoController extends Controller {
             return 200;
         }
     }
-    
-    public function getPendientes(){
-         
-       $fechaHoy = date('Y-m-d');       
-       $compromisos = Compromiso::where('fecha_devolucion', '<', $fechaHoy)->get();
-       return view('compromiso.pendientes', compact('compromisos'));
-       
+
+    public function getPendientes() {
+
+        $fechaHoy = date('Y-m-d');
+        $compromisos = Compromiso::where('fecha_devolucion', '<', $fechaHoy)->get();
+        return view('compromiso.pendientes', compact('compromisos'));
     }
 
     public function postEntregar(Request $request) {
@@ -516,7 +529,7 @@ class CompromisoController extends Controller {
             $compromisoModificar->id_garantia = $garantia->id_garantia;
         }
 
-      
+
         $compromisoModificar->estado = 'Entregado';
         if ($compromisoModificar->save()) {
 
@@ -580,31 +593,31 @@ class CompromisoController extends Controller {
             if (isset($facturaModificar->saldo) && isset($facturaModificar->abono)) {
                 $total2 = intval($facturaModificar->abono) + intval($facturaModificar->saldo);
             }
-            
+
             $garantíaTotal = 'Ninguna';
             $garantia1 = '';
             $garantia2 = '';
-            
+
             $id_garantia = $compromisoModificar->id_garantia;
-            
-            if(isset($id_garantia) && !is_null($id_garantia)){
+
+            if (isset($id_garantia) && !is_null($id_garantia)) {
                 $tieneGarantias = Garantia::find($id_garantia);
-                
-                if($tieneGarantias->tipo_garantia && $tieneGarantias->valor ){
+
+                if ($tieneGarantias->tipo_garantia && $tieneGarantias->valor) {
                     $garantia1 = $tieneGarantias->valor;
                 }
-                
-                 if($tieneGarantias->tipo_garantia2 ){
-                     $garantia2 = $tieneGarantias->tipo_garantia2;
+
+                if ($tieneGarantias->tipo_garantia2) {
+                    $garantia2 = $tieneGarantias->tipo_garantia2;
                 }
-                
-                $garantíaTotal = $garantia1 . ' - '.$garantia2;
+
+                $garantíaTotal = $garantia1 . ' - ' . $garantia2;
             }
-            
-            
 
 
-            $this->crearRecibo3($nombreCliente, $direccionCliente, $referenciaCliente, $cedulaCliente, $fechaHoy, $fechaComp, $abono2, $saldo2, $total2, $fechaDev, $facturaNumero2, $telefonoCliente, $celularCliente, $productosRecibo , $garantíaTotal);
+
+
+            $this->crearRecibo3($nombreCliente, $direccionCliente, $referenciaCliente, $cedulaCliente, $fechaHoy, $fechaComp, $abono2, $saldo2, $total2, $fechaDev, $facturaNumero2, $telefonoCliente, $celularCliente, $productosRecibo, $garantíaTotal);
 //                      
             return redirect('compromiso');
         }

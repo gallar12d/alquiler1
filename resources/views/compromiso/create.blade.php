@@ -19,7 +19,7 @@
 
             <label for="nombre">Fecha actual</label>
 
-             <input   type="text" value="{{date('d-m-Y')}}" class="form-control"   disabled>
+            <input   type="text" value="{{date('d-m-Y')}}" class="form-control"   disabled>
 
         </div> 
 
@@ -62,6 +62,8 @@
                         <th>No identificación</th>
 
                         <th>Nombres</th>
+                        <th>Descuento</th>
+
 
 
 
@@ -76,6 +78,15 @@
                         <td id="clienteCedula">No</td>
 
                         <td id="clienteNombres">No</td>   
+                        <td id="clienteDescuento">                            
+                            <div  id="textoDescuento">
+                                No
+                            </div>
+                            <div id="checkboxDescuento">
+                                <label><input id="checkboxDesc" checked type="checkbox" value="">No aplica</label>
+                            </div>
+                        </td>  
+
 
 
 
@@ -238,22 +249,22 @@
             </select>
 
         </div> 
-        
+
 
         <div class="col-md-12">
-                      
-            
-            <a id="btnCrearcompromiso" class="  col-md-3 btn btn-default ">Crear</a>
-                <!--<a id="btnDescargar" target="_blank" href="{{ asset('public/ReciboGenerado.docx') }}"  class="pull-right btn btn-default">Descargar recibo</a>-->
-                <a id="btnDescargar" target="_blank" href="{{ asset('/ReciboGenerado.docx') }}"  class="pull-right btn btn-default">Descargar recibo</a>
 
-            
-            
-                <br>
-                <br>
-                <br>
-            
-  
+
+            <a id="btnCrearcompromiso" class="  col-md-3 btn btn-default ">Crear</a>
+            <!--<a id="btnDescargar" target="_blank" href="{{ asset('public/ReciboGenerado.docx') }}"  class="pull-right btn btn-default">Descargar recibo</a>-->
+            <a id="btnDescargar" target="_blank" href="{{ asset('/ReciboGenerado.docx') }}"  class="pull-right btn btn-default">Descargar recibo</a>
+
+
+
+            <br>
+            <br>
+            <br>
+
+
 
         </div> 
 
@@ -361,10 +372,11 @@
 
         $('a#btnDescargar').hide();
 
+        $(document).on('change', 'input#checkboxDesc', function () {
+            valortotal();
 
-
-
-
+            $('input#abono').trigger('keyup');
+        });
         function eliminarfila(id) {
 
             $('#tableProductos tbody').find('#tr' + productoNuevo.id).remove();
@@ -372,7 +384,6 @@
         }
 
         var productoNuevo;
-
         var nuevosProductos;
 
 
@@ -390,15 +401,11 @@
                 url = url + '/' + valuecliente;
 
                 $.get(url).done(function (data) {
-
-
-
                     if (data.id) {
-
                         $('td#clienteCedula').text(data.cedula);
-
                         $('td#clienteNombres').text(data.name);
-
+                        $('td#clienteDescuento div#textoDescuento').text(data.descuento + ' %');
+                        $('td#clienteDescuento div#textoDescuento').attr('data-descuento', data.descuento);
                         $('input#idCliente').val(data.cedula);
 
                     } else {
@@ -407,11 +414,7 @@
 
                     }
 
-
-
-
-
-                })
+                });
 
 
 
@@ -427,9 +430,9 @@
 
             var fecha_compromiso = $('input#fecha_compromiso').val();
 
-             if(!fecha_compromiso)
+            if (!fecha_compromiso)
 
-             {
+            {
 
                 alert('Digite la fecha de compromiso');
 
@@ -437,7 +440,7 @@
 
             }
 
-                                
+
 
             var oneDay = 24 * 60 * 60 * 1000;
 
@@ -485,9 +488,9 @@
 
                             if (data.fecha_devolucion != null) {
 
-                                
 
-                               
+
+
 
                                 //sacar la diferencia mayor de 4  entre la fecha del produco y la fecha de compromso
 
@@ -515,11 +518,9 @@
 
                                 }
 
-                            }
+                            } else {
 
-                            else{
-
-                               data.fecha_devolucion = 'No fecha'; 
+                                data.fecha_devolucion = 'No fecha';
 
                             }
 
@@ -637,16 +638,9 @@
 
             var total = $('#totalvalor').attr('data-total');
 
-
-
             var saldo = parseInt(total) - parseInt(dato);
 
-
-
             $("input#saldo").val(saldo);
-
-
-
 
 
         })
@@ -670,7 +664,6 @@
                 alert('Por favor seleccione la fecha de compromiso');
 
             }
-
 
 
             var fecha_compromiso = $('input#fecha_compromiso').val();
@@ -783,9 +776,15 @@
 
                 $('#btnCrearcompromiso').hide();
 
+                var descuento = 0;
 
+                if ($('input#checkboxDesc').is(':checked')) {
+                    descuento = 0;
+                } else {
+                    descuento = 1;
+                }
 
-                $.post(url, {'tipo_pago': tipo_pago, 'saldo': saldo, 'abono': abono, '_token': token, 'fecha_compromiso': fecha_compromiso, 'id_cliente': id_cliente, 'fecha_devolucion': fecha_devolucion, 'productos': productosarray}).done(function (data) {
+                $.post(url, {'tipo_pago': tipo_pago, 'saldo': saldo, 'abono': abono, '_token': token, 'fecha_compromiso': fecha_compromiso, 'id_cliente': id_cliente, 'fecha_devolucion': fecha_devolucion, 'productos': productosarray, 'descuento': descuento}).done(function (data) {
 
 
 
@@ -887,7 +886,24 @@
 
         var textviejo = 'Total:'
 
+
+
+
+        if (!$('input#checkboxDesc').is(':checked')) {
+            var descuento = $('#textoDescuento').attr('data-descuento');
+
+
+            if (descuento != 0 || descuento != '0') {
+                var restarDescuento = (parseInt(suma) * parseInt(descuento)) / 100;
+
+
+                suma = suma - restarDescuento;
+
+            }
+
+        }
         textviejo = textviejo + ' ' + suma;
+
 
         $('#totalvalor').text(textviejo)
 
