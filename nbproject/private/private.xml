@@ -3,13 +3,10 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/wamp64_2/www/alquiler1/app/Http/Controllers/SedeController.php</file>
-            <file>file:/C:/wamp64_2/www/alquiler1/app/Sede.php</file>
-            <file>file:/C:/wamp64_2/www/alquiler1/resources/views/sede/create.blade.php</file>
-            <file>file:/C:/wamp64_2/www/alquiler1/routes/web.php</file>
-            <file>file:/C:/wamp64_2/www/alquiler1/resources/views/compromiso/index.blade.php</file>
+            <file>file:/C:/wamp64_2/www/alquiler1/app/Http/Controllers/CompromisoController.php</file>
+            <file>file:/C:/wamp64_2/www/alquiler1/app/Http/Controllers/PersonaController.php</file>
+            <file>file:/C:/wamp64_2/www/alquiler1/resources/views/persona/cliente/edit.blade.php</file>
             <file>file:/C:/wamp64_2/www/alquiler1/resources/views/compromiso/create.blade.php</file>
-            <file>file:/C:/wamp64_2/www/alquiler1/resources/views/sede/edit.blade.php</file>
         </group>
     </open-files>
 </project-private>

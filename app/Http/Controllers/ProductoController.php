@@ -23,7 +23,7 @@ class ProductoController extends Controller
     public function index()
     {
         $proveedores = Proveedor::all();
-        $productos = Producto::all();
+        $productos = Producto::where('estado', '!=', 'Vendido')->get();
         return view('inventario.index', compact('productos', 'proveedores'));
     }
 

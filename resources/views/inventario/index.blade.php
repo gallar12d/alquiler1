@@ -29,7 +29,8 @@
                 <th>Estado</th>
                 <th>Fecha entrega</th>
                 <th>Fecha devolución</th>
-                <th>Valor</th>
+                <th>Valor alquiler</th>
+                <th>Valor venta</th>
                 <th>Linea</th>
                 <th>Proveedor</th>
                 <th>Foto</th>
@@ -49,6 +50,7 @@
                 <td>{{$producto->fecha_entrega}}</td>
                  <td>{{$producto->fecha_devolucion}}</td>
                 <td>{{$producto->valor}}</td>
+                 <td>{{$producto->valor_venta}}</td>
                 <td>{{$producto->linea}}</td>
                 @if(isset($producto->proveedor))
                 <td>{{$producto->proveedor->nombre}}</td>
@@ -140,9 +142,10 @@
                         <label for="nombre">Valor alquiler *</label>
                         <input required type="number" class="form-control" name ="valor">
                     </div>
+                    
                      <div class="form-group">
-                        <label for="nombre">Valor venta*</label>
-                        <input required type="number" class="form-control" name ="valor_venta">
+                        <label for="nombre">Valor venta</label>
+                        <input  type="number" class="form-control" name ="valor_venta">
                     </div>
                     <div class="form-group">
                         <label for="nombre">Linea</label>

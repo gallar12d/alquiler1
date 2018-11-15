@@ -1,31 +1,17 @@
 <?php
 
-
-
 namespace App\Http\Controllers;
 
-
-
 use App\Producto;
-
 use App\Proveedor;
-
 use App\Factura;
-
 use App\Garantia;
-
 use App\Entrada;
-
 use App\Salida;
 use App\Novedad;
-
 use Illuminate\Http\Request;
 
-
-
 class CierreController extends Controller {
-
-
 
     /**
 
@@ -36,22 +22,15 @@ class CierreController extends Controller {
      * @return \Illuminate\Http\Response
 
      */
-
     public function __construct() {
 
         $this->middleware('auth');
-
     }
-
-
 
     public function index() {
 
         return view('cierre.index');
-
     }
-
-
 
     public function generar(Request $data) {
 
@@ -62,57 +41,46 @@ class CierreController extends Controller {
         $fechaFin = $data->input('fechaFin');
 
         $facturasAbonos = Factura::whereNotNull('metodo_pago')
-
                         ->where('created_at', '>=', $fechaInicio)
-
-                        ->where('created_at', '<=', $fechaFin)->get();
+                        ->where('created_at', '<=', $fechaFin)->whereNull('tipo')->get();
 
         $facturasSaldos = Factura::whereNotNull('metodo_pago_saldo')
-
                         ->where('created_at', '>=', $fechaInicio)
-
-                        ->where('created_at', '<=', $fechaFin)->get();
+                        ->where('created_at', '<=', $fechaFin)                
+                       ->whereNull('tipo')->get();
 
         $garantias = Garantia::where('created_at', '>=', $fechaInicio)
-
-                        ->where('created_at', '<=', $fechaFin)->where('estado', 1)
-                        ->get();
+                ->where('created_at', '<=', $fechaFin)->where('estado', 1)
+                ->get();
 
         $recargos = Entrada::where('tipo', 'Recargo')
-
                         ->where('created_at', '>=', $fechaInicio)
-
                         ->where('created_at', '<=', $fechaFin)->get();
 
         $danios = Entrada::where('tipo', 'Daños')
-
                         ->where('created_at', '>=', $fechaInicio)
-
                         ->where('created_at', '<=', $fechaFin)->get();
 
-        $salidas = Salida::
-
-                        where('created_at', '>=', $fechaInicio)
-
+        $salidas = Salida::where('created_at', '>=', $fechaInicio)
                         ->where('created_at', '<=', $fechaFin)->get();
-        
+
         $novedades = Novedad::where('created_at', '>=', $fechaInicio)
-
                         ->where('created_at', '<=', $fechaFin)->get();
 
-        
-
-        
-
-        
+        $ventas = Factura::where('fecha_pago', '>=', $fechaInicio)
+                        ->where('fecha_pago', '<=', $fechaFin)
+                        ->where('tipo', 'venta')->get();
 
 
 
-        return view('cierre.generado', compact('novedades', 'facturasAbonos', 'facturasSaldos', 'garantias', 'recargos', 'danios', 'salidas'));
 
+
+
+
+
+
+        return view('cierre.generado', compact('ventas', 'novedades', 'facturasAbonos', 'facturasSaldos', 'garantias', 'recargos', 'danios', 'salidas'));
     }
-
-
 
     /**
 
@@ -123,7 +91,6 @@ class CierreController extends Controller {
      * @return \Illuminate\Http\Response
 
      */
-
     public function crear(Request $data) {
 
 
@@ -133,35 +100,24 @@ class CierreController extends Controller {
         if (Producto::create($data->all())) {
 
             echo true;
-
         }
-
     }
-
-
 
     public function postEditar(Request $data) {
 
         if (Producto::where('id', $data->id)
-
                         ->update($data->except(['_token']))) {
 
             echo true;
-
         }
-
     }
-
-
 
     public function buscarproducto($id) {
 
 
 
         $productos = Producto::where('id', $id)
-
                         ->orWhere('nombre', 'like', $id . '%')
-
                         ->orWhere('referencia', 'like', $id . '%')->get();
 
 
@@ -169,10 +125,7 @@ class CierreController extends Controller {
 
 
         return $productos;
-
     }
-
-
 
     public function editar($id) {
 
@@ -185,10 +138,7 @@ class CierreController extends Controller {
 
 
         return view('inventario.edit', compact('producto', 'proveedores'));
-
     }
-
-
 
     public function eliminar($id) {
 
@@ -203,12 +153,8 @@ class CierreController extends Controller {
 
 
             echo true;
-
         }
-
     }
-
-
 
     /**
 
@@ -221,14 +167,10 @@ class CierreController extends Controller {
      * @return \Illuminate\Http\Response
 
      */
-
     public function store(Request $request) {
 
         //
-
     }
-
-
 
     /**
 
@@ -241,14 +183,10 @@ class CierreController extends Controller {
      * @return \Illuminate\Http\Response
 
      */
-
     public function show(Producto $producto) {
 
         //
-
     }
-
-
 
     /**
 
@@ -261,14 +199,10 @@ class CierreController extends Controller {
      * @return \Illuminate\Http\Response
 
      */
-
     public function edit(Producto $producto) {
 
         //
-
     }
-
-
 
     /**
 
@@ -283,14 +217,10 @@ class CierreController extends Controller {
      * @return \Illuminate\Http\Response
 
      */
-
     public function update(Request $request, Producto $producto) {
 
         //
-
     }
-
-
 
     /**
 
@@ -303,14 +233,9 @@ class CierreController extends Controller {
      * @return \Illuminate\Http\Response
 
      */
-
     public function destroy(Producto $producto) {
 
         //
-
     }
 
-
-
 }
-

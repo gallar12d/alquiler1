@@ -83,16 +83,29 @@ Route::get('/salida/eliminar/{id}', 'SalidaController@eliminar');
 //routes cierre
 Route::get('/cierre', 'CierreController@index');
 Route::post('/cierre/generar', 'CierreController@generar');
-
 Route::get('/novedad', 'NovedadController@index');
 Route::post('/novedad/create', 'NovedadController@create');
-
 Route::get('/sede', 'SedeController@index');
 Route::get('/sede/create', 'SedeController@getCreate');
 Route::get('/sede/delete/{id}', 'SedeController@getDelete');
 Route::get('/sede/edit/{id}', 'SedeController@getEdit');
 Route::post('/sede/create', 'SedeController@postCreate');
 Route::post('/sede/edit', 'SedeController@postedit');
+
+//ventas
+
+Route::get('/venta', 'VentaController@index');
+Route::post('/venta/create', 'VentaController@postCreate');
+Route::post('/cierre/generar', 'CierreController@generar');
+Route::get('/novedad', 'NovedadController@index');
+Route::post('/novedad/create', 'NovedadController@create');
+Route::get('/sede', 'SedeController@index');
+Route::get('/sede/create', 'SedeController@getCreate');
+Route::get('/sede/delete/{id}', 'SedeController@getDelete');
+Route::get('/sede/edit/{id}', 'SedeController@getEdit');
+Route::post('/sede/create', 'SedeController@postCreate');
+Route::post('/sede/edit', 'SedeController@postedit');
+
 
 
 

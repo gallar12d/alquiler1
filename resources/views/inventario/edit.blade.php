@@ -43,14 +43,12 @@
         </div>
          
         <div class="form-group">
-            <label for="nombre">Valor  alquiler *</label>
-           
+            <label for="nombre">Valor alquiler *</label>           
             <input <?php echo (Auth::user()->rol2 == 'superusuario') ? '' : 'disabled' ?> required type="number" value = '{{$producto->valor}}' class="form-control" name ="valor">
          
         </div>
         <div class="form-group">
-            <label for="nombre">Valor  venta </label>
-         
+            <label for="nombre">Valor venta </label>         
             <input <?php echo (Auth::user()->rol2 == 'superusuario') ? '' : 'disabled' ?> required type="number" value = '{{$producto->valor_venta}}' class="form-control" name ="valor_venta">
          
         </div>

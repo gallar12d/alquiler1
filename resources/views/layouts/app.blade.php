@@ -42,9 +42,9 @@
                             &nbsp;
                             @if (!Auth::guest())
 
-                            @if(Auth::user()->rol == 'administrador')
+                           
                             <li><a href="{{ url('/inventario') }}">Inventario</a></li>
-                            @endif
+                            
 
 
                             <li><a href="{{url('/compromiso')}}">Compromisos</a></li>
@@ -73,6 +73,7 @@
                                         @endif
                                         <a href="{{url('/compromiso/pendientes')}}">Compromisos pendientes</a>
                                         <a href="{{url('/salida')}}">Salidas de caja</a>
+                                        <a href="{{url('/venta')}}">Ventas</a>
 
                                     </li>
                                 </ul>
