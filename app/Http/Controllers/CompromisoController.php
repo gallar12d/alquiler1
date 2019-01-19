@@ -8,9 +8,11 @@ use App\Persona;
 use App\Garantia;
 use App\Entrada;
 use App\Salida;
+use App\Abono;
 use App\Factura;
 use App\Compromiso;
 use App\CompromisoProducto;
+use App\CompromisoProducto2;
 use App\ConsecutivoFactura;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -29,7 +31,7 @@ class CompromisoController extends Controller {
 
     public function index() {
 
-        $compromisos = Compromiso::take('1')->orderBy('id_compromiso', 'desc')->get();
+        $compromisos = Compromiso::take('100')->orderBy('id_compromiso', 'desc')->get();
         return view('compromiso.index', compact('compromisos'));
     }
 
@@ -37,6 +39,22 @@ class CompromisoController extends Controller {
         $fechaInicial = $data->input('fechaInicio');
         $fechaFin = $data->input('fechaFin');
         $compromisos = Compromiso::where('fecha_compromiso', '>=', $fechaInicial)->where('fecha_compromiso', '<=', $fechaFin)->get();
+        return view('compromiso.index', compact('compromisos'));
+    }
+
+    public function postFiltrar2(Request $data) {
+        if (!is_null($data->input('cedula'))) {
+            $compromisos = Compromiso::where('cedula', $data->input('cedula'))->get();
+        }
+
+        if (!is_null($data->input('factura'))) {
+            $facturasid = Factura::where('numero_factura', $data->input('factura'))->get()->pluck('id_factura');
+
+            $compromisos = Compromiso::whereIn('id_factura', $facturasid)->get();
+        }
+
+
+
         return view('compromiso.index', compact('compromisos'));
     }
 
@@ -64,10 +82,9 @@ class CompromisoController extends Controller {
             $userModificarDescuento = Persona::where('cedula', $id_cliente)->first();
             $userModificarDescuento->descuento = 0;
             $userModificarDescuento->save();
-            
         }
-        
-      
+
+
         $banderaCompromiso = false;
         $cliente2 = Persona::where('cedula', $id_cliente)->first();
 
@@ -117,6 +134,7 @@ class CompromisoController extends Controller {
 
             //crear los compromisos_productos
             $concepto = 'Compromiso de productos: ';
+            
 
             foreach ($productos as $producto) {
                 $compromisoProducto = new CompromisoProducto;
@@ -124,11 +142,18 @@ class CompromisoController extends Controller {
                 $compromisoProducto->ajustes = $producto[1];
                 $compromisoProducto->id_compromiso = $id_compromiso;
                 $compromisoProducto->save();
+                $compromisoProducto2 = new CompromisoProducto2;
+                $compromisoProducto2->id_producto = $producto[0];
+                $compromisoProducto2->ajustes = $producto[1];
+                $compromisoProducto2->id_compromiso = $id_compromiso;
+                $compromisoProducto2->save();
                 //cambiar estado al producto
                 $producto = Producto::find($producto[0]);
                 $concepto = $concepto . $producto->nombre . ', ';
                 $producto->estado = 'Comprometido';
                 $producto->save();
+                
+               
             }
 
             //crar la factura
@@ -221,7 +246,7 @@ class CompromisoController extends Controller {
                             $total2 = intval($abono) + intval($saldo);
                         }
 
-                        
+
 
 
                         $this->crearRecibo2($nombreCliente, $direccionCliente, $referenciaCliente, $cedulaCliente, $fechaHoy, $fechaComp, $abono2, $saldo2, $total2, $fechaDev, $facturaNumero2, $telefonoCliente, $celularCliente, $productosRecibo);
@@ -262,8 +287,17 @@ class CompromisoController extends Controller {
 
     public function crearRecibo2($nombreCliente = '', $direccionCliente = '', $referenciaCliente = '', $cedulaCliente = '', $fechaHoy = '', $fechaComp = '', $abono = '', $saldo = '', $total = '', $fechaDev = '', $facturaNumero = '', $telefonoCliente = '', $celularCliente = '', $productosRecibo = NULL) {
 
+
+        $conteoProductos = count($productosRecibo);
         $phpWord = new \PhpOffice\PhpWord\PhpWord();
-        $my_template = new \PhpOffice\PhpWord\TemplateProcessor(public_path('factura1.docx'));
+
+        if ($conteoProductos <= 15) {
+            $my_template = new \PhpOffice\PhpWord\TemplateProcessor(public_path('factura1.docx'));
+        } else if ($conteoProductos <= 30) {
+            $my_template = new \PhpOffice\PhpWord\TemplateProcessor(public_path('factura1b.docx'));
+        }
+
+
         $my_template->setValue('nombreCliente', $nombreCliente);
         $my_template->setValue('direccionCliente', $direccionCliente);
         $my_template->setValue('referenciaCliente', $referenciaCliente);
@@ -278,20 +312,36 @@ class CompromisoController extends Controller {
         $my_template->setValue('facturaNumero', $facturaNumero);
         $my_template->setValue('telefonoCliente', $telefonoCliente);
         $my_template->setValue('celularCliente', $celularCliente);
-        $conteoProductos = count($productosRecibo);
+
 
         if ($conteoProductos <= 15) {
             $j = 1;
             foreach ($productosRecibo as $prod) {
                 $id = $prod[0];
                 $buscadoProducto = Producto::find($id);
-                $my_template->setValue('p' . $j, $buscadoProducto->nombre . '- (' . $buscadoProducto->referencia . ')');
+                $my_template->setValue('p' . $j, $buscadoProducto->nombre . ' - (' . $buscadoProducto->referencia . ')');
                 $my_template->setValue('v' . $j, $buscadoProducto->valor);
                 $j++;
             }
 
             if ($j < 15) {
                 for ($i = $j; $i <= 15; $i++) {
+                    $my_template->setValue('p' . $i, '');
+                    $my_template->setValue('v' . $i, '');
+                }
+            }
+        } else if ($conteoProductos <= 30) {
+            $j = 1;
+            foreach ($productosRecibo as $prod) {
+                $id = $prod[0];
+                $buscadoProducto = Producto::find($id);
+                $my_template->setValue('p' . $j, $buscadoProducto->nombre . ' - (' . $buscadoProducto->referencia . ')');
+                $my_template->setValue('v' . $j, $buscadoProducto->valor);
+                $j++;
+            }
+
+            if ($j < 30) {
+                for ($i = $j; $i <= 30; $i++) {
                     $my_template->setValue('p' . $i, '');
                     $my_template->setValue('v' . $i, '');
                 }
@@ -310,6 +360,13 @@ class CompromisoController extends Controller {
     public function crearRecibo3($nombreCliente = '', $direccionCliente = '', $referenciaCliente = '', $cedulaCliente = '', $fechaHoy = '', $fechaComp = '', $abono = '', $saldo = '', $total = '', $fechaDev = '', $facturaNumero = '', $telefonoCliente = '', $celularCliente = '', $productosRecibo = NULL, $garantíaTotal = '') {
 
         $phpWord = new \PhpOffice\PhpWord\PhpWord();
+        $conteoProductos = count($productosRecibo);
+
+        if ($conteoProductos <= 15) {
+            $my_template = new \PhpOffice\PhpWord\TemplateProcessor(public_path('factura2.docx'));
+        } elseif ($conteoProductos <= 30) {
+            $my_template = new \PhpOffice\PhpWord\TemplateProcessor(public_path('factura2b.docx'));
+        }
         $my_template = new \PhpOffice\PhpWord\TemplateProcessor(public_path('factura2.docx'));
         $my_template->setValue('nombreCliente', $nombreCliente);
         $my_template->setValue('direccionCliente', $direccionCliente);
@@ -326,7 +383,7 @@ class CompromisoController extends Controller {
         $my_template->setValue('telefonoCliente', $telefonoCliente);
         $my_template->setValue('celularCliente', $celularCliente);
         $my_template->setValue('garantias', $garantíaTotal);
-        $conteoProductos = count($productosRecibo);
+
 
         if ($conteoProductos <= 15) {
             $j = 1;
@@ -340,6 +397,22 @@ class CompromisoController extends Controller {
 
             if ($j < 15) {
                 for ($i = $j; $i <= 15; $i++) {
+                    $my_template->setValue('p' . $i, '');
+                    $my_template->setValue('v' . $i, '');
+                }
+            }
+        } elseif ($conteoProductos <= 30) {
+            $j = 1;
+            foreach ($productosRecibo as $prod) {
+                $id = $prod;
+                $buscadoProducto = Producto::find($id);
+                $my_template->setValue('p' . $j, $buscadoProducto->nombre . '- (' . $buscadoProducto->referencia . ')');
+                $my_template->setValue('v' . $j, $buscadoProducto->valor);
+                $j++;
+            }
+
+            if ($j < 30) {
+                for ($i = $j; $i <= 30; $i++) {
                     $my_template->setValue('p' . $i, '');
                     $my_template->setValue('v' . $i, '');
                 }
@@ -360,30 +433,33 @@ class CompromisoController extends Controller {
 
     public function eliminar($id) {
         $compromiso = Compromiso::find($id);
+        $array_ids_productos = CompromisoProducto::where('id_compromiso', $id)->get()->pluck('id_producto');
 
-        $productosCompromiso = CompromisoProducto::where('id_compromiso', $id)->get();
-
-        if (count($productosCompromiso) >= 1 && !is_null($productosCompromiso) && isset($productosCompromiso)) {
-            foreach ($productosCompromiso as $producto) {
-                $productoModificar = Producto::find($producto->id_producto);
-                $productoModificar->estado = 'Disponible';
-                $productoModificar->save();
-            }
-        }
         $productosCompromiso = CompromisoProducto::where('id_compromiso', $id);
         $productosCompromiso->delete();
         $facturamodificar = Factura::find($compromiso->id_factura);
-
-        if ($compromiso->delete()) {
-
+        $compromiso->estado = 'Anulado';
+        if ($compromiso->save()) {
             //buscar factura y borrarla 
             $facturamodificar->estado = 'Anulada';
             $facturamodificar->save();
-            $facturamodificar->delete();
 
-            $consecutivoFactura = ConsecutivoFactura::find(1);
-            $consecutivoFactura->numero = $consecutivoFactura->numero - 1;
-            $consecutivoFactura->save();
+            //vrificar si existen mas compromisos con cada producto de lo contrario poner ese producto en disponible
+            if (count($array_ids_productos)) {
+                foreach ($array_ids_productos as $id_prod) {
+                    $tieneCompromisoProducto = CompromisoProducto::where('id_producto', $id_prod)->get();
+                    if (count($tieneCompromisoProducto) == 0) {
+                        //es por que ese producto no tiene compromisos entonces poner en disponible
+                        $productoModificarEstado = Producto::find($id_prod);
+                        $productoModificarEstado->estado = 'Disponible';
+                        $productoModificarEstado->save();
+                    }
+                }
+            }
+
+            //ver si ha tenido abonos para anularlos 
+
+
 
             echo true;
         }
@@ -391,7 +467,7 @@ class CompromisoController extends Controller {
 
     public function detalle($id_compromiso) {
 
-        $productos = CompromisoProducto::where('id_compromiso', $id_compromiso)->get();
+        $productos = CompromisoProducto2::where('id_compromiso', $id_compromiso)->get();
         return view('compromiso.detalle', compact('productos'));
     }
 
@@ -401,6 +477,11 @@ class CompromisoController extends Controller {
         $compromiso = Compromiso::find($id);
         $factura = Factura::find($compromiso->id_factura);
         return view('compromiso.entrega', compact('productos', 'compromiso', 'factura'));
+    }
+
+    public function abonar($id_compromiso) {
+        $compromiso = Compromiso::find($id_compromiso);
+        return view('compromiso.abonar', compact('compromiso'));
     }
 
     public function penalizar($id) {
@@ -429,12 +510,23 @@ class CompromisoController extends Controller {
             //calcular diferencia de dias 
 
             $datetime1 = date_create($compromiso->fecha_devolucion);
+            $fechaRecorrerBuscarDomingos = $datetime1;
             $datetime2 = date_create(date('y-m-d'));
             $interval = date_diff($datetime1, $datetime2);
-
             $interval = $interval->format('%a');
+            $conteoDomingos = 0;
+
+            for ($i = 1; $i <= intval($interval); $i++) {
+                if ($fechaRecorrerBuscarDomingos->format('l') === 'Sunday') {
+                    $conteoDomingos = $conteoDomingos + 1;
+                }
+
+                $datetime1->modify("+1 days");
+            }
+
 
             $porcentaje = ( intval($factura->valor) * 5) / 100;
+            $interval = $interval - $conteoDomingos;
 
             $recargo = $porcentaje * $interval;
             $textrecargo = 'Recargo por: ' . $interval . ' días.';
@@ -489,7 +581,7 @@ class CompromisoController extends Controller {
     public function getPendientes() {
 
         $fechaHoy = date('Y-m-d');
-        $compromisos = Compromiso::where('fecha_devolucion', '<', $fechaHoy)->get();
+        $compromisos = Compromiso::where('fecha_devolucion', '<', $fechaHoy)->where('estado', 'Entregado')->orWhere('estado', 'Pendiente')->get();
         return view('compromiso.pendientes', compact('compromisos'));
     }
 
@@ -531,6 +623,27 @@ class CompromisoController extends Controller {
 
 
         $compromisoModificar->estado = 'Entregado';
+
+        //realizar el ultimo abono si es que hizo abonos anteriormente
+//        if (count($compromisoModificar->abonos)) {
+//            // si ha hecho abonos y hay que crear el ultimo abono con el saldo 
+//            $saldo_abonos = $compromisoModificar->factura->saldo_abonos;
+//            $nuevoAbono = new Abono();
+//            $nuevoAbono->valor = $saldo_abonos;
+//            $nuevoAbono->fecha = date('Y-m-d');
+//            $nuevoAbono->id_compromiso = $compromisoModificar->id_compromiso;
+//            $nuevoAbono->id_factura = $compromisoModificar->factura->id_factura;
+//            $nuevoAbono->id_cliente = $compromisoModificar->persona->id;
+//            $nuevoAbono->save();
+//
+//            //calcular nuevo valor del saldo 2
+//            $facturaModificar = Factura::find($compromisoModificar->factura->id_factura);
+//            $facturaModificar->saldo_abonos = intval($saldo_abonos) - intval($saldo_abonos);
+//            $facturaModificar->save();
+//        }
+
+
+
         if ($compromisoModificar->save()) {
 
             //datos para word
@@ -581,12 +694,26 @@ class CompromisoController extends Controller {
             if (isset($compromisoModificar->fecha_devolucion)) {
                 $fechaDev = $compromisoModificar->fecha_devolucion;
             }
-            if (isset($facturaModificar->abono)) {
-                $abono2 = $facturaModificar->abono;
+
+            //evaluar si hizo abonos
+            if (count($compromisoModificar->abonos)) {
+                $valor_abonos = 0;
+                foreach ($compromisoModificar->abonos as $abono) {
+                    $valor_abonos = $valor_abonos + $abono->valor;
+                }
+                $valor_abonos = $valor_abonos + $facturaModificar->abono;
+                $abono2 = $valor_abonos;
+                $saldo2 = $facturaModificar->saldo_abonos;
+            } else {
+                if (isset($facturaModificar->abono)) {
+                    $abono2 = $facturaModificar->abono;
+                }
+                if (isset($facturaModificar->saldo)) {
+                    $saldo2 = $facturaModificar->saldo;
+                }
             }
-            if (isset($facturaModificar->saldo)) {
-                $saldo2 = $facturaModificar->saldo;
-            }
+
+
             if (isset($facturaModificar->numero_factura)) {
                 $facturaNumero2 = $facturaModificar->numero_factura;
             }
@@ -623,11 +750,172 @@ class CompromisoController extends Controller {
         }
     }
 
+    public function postAbonar(Request $request) {
+        $id_compromiso = $request->id_compromiso;
+        $valor_abono = $request->valor_abono;
+        $valorTotalAbonosTodos = 0;
+
+
+        //obtener el compromiso
+        $compromiso = Compromiso::find($id_compromiso);
+        $clienteRecibo = Persona::find($compromiso->persona->id);
+
+        $valor_saldo_abonos = $compromiso->factura->saldo_abonos;
+        $valor_saldo = $compromiso->factura->saldo;
+
+        if (!$valor_saldo_abonos && $valor_saldo != 0) {
+            //es primera vez que se abona y si es posible abonar
+            if ($valor_abono <= $valor_saldo) {
+                //hacer el abono
+
+                $nuevoAbono = new Abono();
+                $nuevoAbono->valor = $valor_abono;
+                $nuevoAbono->fecha = date('Y-m-d');
+                $nuevoAbono->id_compromiso = $compromiso->id_compromiso;
+                $nuevoAbono->id_factura = $compromiso->factura->id_factura;
+                $nuevoAbono->id_cliente = $compromiso->persona->id;
+                $nuevoAbono->save();
+
+                //calcular nuevo valor del saldo 2
+                $facturaModificar = Factura::find($compromiso->factura->id_factura);
+                $facturaModificar->saldo_abonos = intval($valor_saldo) - intval($valor_abono);
+                $valor_nuevo_saldo = intval($valor_saldo) - intval($valor_abono);
+                if ($facturaModificar->save()) {
+                    //calcular el valor de todos los abonos
+                    if (count($compromiso->abonos)) {
+                        foreach ($compromiso->abonos as $abono) {
+                            $valorTotalAbonosTodos = $valorTotalAbonosTodos + intval($abono->valor);
+                        }
+                    }
+
+                    $valorTotalAbonosTodos = $valorTotalAbonosTodos + $facturaModificar->abono;
+                    $this->crearReciboAbono($compromiso, $clienteRecibo, $valor_abono, $valor_nuevo_saldo, $valorTotalAbonosTodos);
+                    return redirect('compromiso/abonar/' . $compromiso->id_compromiso);
+                }
+            } else {
+                echo 'El valor del abono no puede ser mayor al saldo';
+            }
+        } else if ($valor_saldo_abonos) {
+            if ($valor_abono <= $valor_saldo_abonos) {
+                $nuevoAbono = new Abono();
+                $nuevoAbono->valor = $valor_abono;
+                $nuevoAbono->fecha = date('Y-m-d');
+                $nuevoAbono->id_compromiso = $compromiso->id_compromiso;
+                $nuevoAbono->id_factura = $compromiso->factura->id_factura;
+                $nuevoAbono->id_cliente = $compromiso->persona->id;
+                $nuevoAbono->save();
+
+                //calcular nuevo valor del saldo 2
+                $facturaModificar = Factura::find($compromiso->factura->id_factura);
+                $facturaModificar->saldo_abonos = intval($valor_saldo_abonos) - intval($valor_abono);
+                $valor_nuevo_saldo = intval($valor_saldo_abonos) - intval($valor_abono);
+
+                if ($facturaModificar->save()) {
+
+                    if (count($compromiso->abonos)) {
+                        foreach ($compromiso->abonos as $abono) {
+                            $valorTotalAbonosTodos = $valorTotalAbonosTodos + intval($abono->valor);
+                        }
+                    }
+                    $valorTotalAbonosTodos = $valorTotalAbonosTodos + $facturaModificar->abono;
+                    $this->crearReciboAbono($compromiso, $clienteRecibo, $valor_abono, $valor_nuevo_saldo, $valorTotalAbonosTodos);
+                    return redirect('compromiso/abonar/' . $compromiso->id_compromiso);
+                }
+            } else {
+                echo 'El valor del abono no puede ser mayor al saldo';
+            }
+        }
+    }
+
+    public function crearReciboAbono($compromisoRecibo, $clienteRecibo, $valorAbono, $valor_nuevo_saldo, $valorTotalAbonosTodos) {
+        $phpWord = new \PhpOffice\PhpWord\PhpWord();
+        $my_template = new \PhpOffice\PhpWord\TemplateProcessor(public_path('facturaAbono.docx'));
+        $my_template->setValue('conceptoAbono', 'Abono para compromiso con factura No: ' . $compromisoRecibo->factura->numero_factura);
+        $my_template->setValue('valorAbono', $valorAbono);
+        $my_template->setValue('total', $compromisoRecibo->factura->valor);
+        $my_template->setValue('saldoAbonos', $valor_nuevo_saldo);
+        $my_template->setValue('totalAbonos', $valorTotalAbonosTodos);
+
+        if (isset($clienteRecibo->name)) {
+            $my_template->setValue('nombreCliente', $clienteRecibo->name);
+        } else {
+            $my_template->setValue('nombreCliente', '');
+        }
+
+        if (isset($clienteRecibo->direccion)) {
+            $my_template->setValue('direccionCliente', $clienteRecibo->direccion);
+        } else {
+            $my_template->setValue('direccionCliente', '');
+        }
+        if (isset($clienteRecibo->referencia_nombre)) {
+            $my_template->setValue('referenciaCliente', $clienteRecibo->referencia_nombre);
+        } else {
+            $my_template->setValue('referenciaCliente', '');
+        }
+        if (isset($clienteRecibo->cedula)) {
+            $my_template->setValue('cedulaCliente', $clienteRecibo->cedula);
+        } else {
+            $my_template->setValue('cedulaCliente', '');
+        }
+        $my_template->setValue('fechaHoy', date('Y-m-d'));
+
+        if (isset($compromisoRecibo->fecha_compromiso)) {
+            $my_template->setValue('fechaComp', $compromisoRecibo->fecha_compromiso);
+        } else {
+            $my_template->setValue('fechaComp', '');
+        }
+
+
+
+        if (isset($compromisoRecibo->fecha_devolucion)) {
+            $my_template->setValue('fechaDev', $compromisoRecibo->fecha_devolucion);
+        } else {
+            $my_template->setValue('fechaDev', '');
+        }
+        if (isset($compromisoRecibo->factura->numero_factura)) {
+            $my_template->setValue('facturaNumero', $compromisoRecibo->factura->numero_factura);
+        } else {
+            $my_template->setValue('facturaNumero', '');
+        }
+
+        if (isset($clienteRecibo->celular)) {
+            $my_template->setValue('celularCliente', $clienteRecibo->celular);
+        } else {
+            $my_template->setValue('celularCliente', '');
+        }
+        if (isset($clienteRecibo->telefono)) {
+            $my_template->setValue('telefonoCliente', $clienteRecibo->telefono);
+        } else {
+            $my_template->setValue('telefonoCliente', '');
+        }
+
+
+
+        try {
+            $my_template->saveAs(public_path('ReciboGeneradoAbono.docx'));
+            header('Content-type: application/pdf');
+            header('Content-Disposition: attachment; filename="ReciboGeneradoAbono.docx"');
+            readfile(public_path('ReciboGeneradoAbono.docx'));
+            return redirect('compromiso');
+        } catch (Exception $e) {
+            echo 'Hubo un error, comuníquese con el administrador del sistema';
+        }
+    }
+
     public function postDevolucion(Request $request) {
 
         $compromisoModificar = Compromiso::find($request->id_compromiso);
+        $compromisoRecibo = $compromisoModificar;
+        $clienteRecibo = Persona::where('cedula', $compromisoModificar->cedula)->first();
         $compromisoModificar->estado = 'Devuelto';
         $compromisoModificar->buen_estado = $request->malas_condiciones;
+
+
+        $recibo = false;
+        $valorDanio = 0;
+        $valorRecargo = 0;
+        $conceptoDanio = '';
+        $conceptoRecargo = '';
         if (isset($request->condiciones) && !is_null($request->condiciones)) {
             $compromisoModificar->condiciones_entrega = $request->condiciones;
         }
@@ -637,6 +925,12 @@ class CompromisoController extends Controller {
             $nuevaentrada->valor = $request->valor_danio;
             $nuevaentrada->tipo = 'Daños';
             $nuevaentrada->save();
+
+            //hay que entregar recibo
+            $recibo = true;
+            $valorDanio = $request->valor_danio;
+            $conceptoDanio = 'Pago por daños de compromiso con factura No ' . $compromisoModificar->factura->numero_factura;
+            $conceptoDanio = $conceptoDanio . ': ' . $request->condiciones;
         }
 
         if (!isset($request->anular) && is_null($request->anular)) {
@@ -646,6 +940,11 @@ class CompromisoController extends Controller {
                 $nuevaentrada->valor = $request->recargo;
                 $nuevaentrada->tipo = 'Recargo';
                 $nuevaentrada->save();
+
+                //hay que entregar recibo
+                $recibo = true;
+                $valorRecargo = $request->recargo;
+                $conceptoRecargo = 'Recargo por demora de entrega de compromiso con factura No  ' . $compromisoModificar->factura->numero_factura;
             }
         }
 
@@ -678,7 +977,113 @@ class CompromisoController extends Controller {
 
 
         if ($compromisoModificar->save()) {
+            $array_ids_productos = CompromisoProducto::where('id_compromiso', $compromisoModificar->id_compromiso)->get()->pluck('id_producto');
+            $productosCompromiso = CompromisoProducto::where('id_compromiso', $compromisoModificar->id_compromiso)->delete();
+            
+
+            //vrificar si existen mas compromisos con cada producto de lo contrario poner ese producto en disponible
+            if (count($array_ids_productos)) {
+                foreach ($array_ids_productos as $id_prod) {
+                    $tieneCompromisoProducto = CompromisoProducto::where('id_producto', $id_prod)->get();
+                    if (count($tieneCompromisoProducto) == 0) {
+                        //es por que ese producto no tiene compromisos entonces poner en disponible
+                        $productoModificarEstado = Producto::find($id_prod);
+                        $productoModificarEstado->estado = 'Disponible';
+                        $productoModificarEstado->save();
+                    }
+                }
+            }
+
+            //si recibo es true hay que entregar recibo sino haga el redirect
+
+            if ($recibo) {
+                $this->crearReciboRecargoDanios($compromisoRecibo, $clienteRecibo, $valorDanio, $conceptoDanio, $valorRecargo, $conceptoRecargo);
+            } else {
+                return redirect('compromiso');
+            }
+        }
+    }
+
+    public function crearReciboRecargoDanios($compromisoRecibo, $clienteRecibo, $valorDanio, $conceptoDanio, $valorRecargo, $conceptoRecargo) {
+        $phpWord = new \PhpOffice\PhpWord\PhpWord();
+        $my_template = new \PhpOffice\PhpWord\TemplateProcessor(public_path('facturaRecargosDanios.docx'));
+
+        $my_template->setValue('conceptoDanio', $conceptoDanio);
+        $my_template->setValue('valorDanio', $valorDanio);
+        $my_template->setValue('conceptoRecargo', $conceptoRecargo);
+        $my_template->setValue('valorRecargo', $valorRecargo);
+
+        $total = 0;
+
+        $total = intval($valorDanio) + intval($valorRecargo);
+
+        $my_template->setValue('total', $total);
+
+        if (isset($clienteRecibo->name)) {
+            $my_template->setValue('nombreCliente', $clienteRecibo->name);
+        } else {
+            $my_template->setValue('nombreCliente', '');
+        }
+
+        if (isset($clienteRecibo->direccion)) {
+            $my_template->setValue('direccionCliente', $clienteRecibo->direccion);
+        } else {
+            $my_template->setValue('direccionCliente', '');
+        }
+        if (isset($clienteRecibo->referencia_nombre)) {
+            $my_template->setValue('referenciaCliente', $clienteRecibo->referencia_nombre);
+        } else {
+            $my_template->setValue('referenciaCliente', '');
+        }
+        if (isset($clienteRecibo->cedula)) {
+            $my_template->setValue('cedulaCliente', $clienteRecibo->cedula);
+        } else {
+            $my_template->setValue('cedulaCliente', '');
+        }
+        $my_template->setValue('fechaHoy', date('Y-m-d'));
+
+        if (isset($compromisoRecibo->fecha_compromiso)) {
+            $my_template->setValue('fechaComp', $compromisoRecibo->fecha_compromiso);
+        } else {
+            $my_template->setValue('fechaComp', '');
+        }
+
+
+
+        $my_template->setValue('total', $total);
+
+        if (isset($compromisoRecibo->fecha_devolucion)) {
+            $my_template->setValue('fechaDev', $compromisoRecibo->fecha_devolucion);
+        } else {
+            $my_template->setValue('fechaDev', '');
+        }
+        if (isset($compromisoRecibo->factura->numero_factura)) {
+            $my_template->setValue('facturaNumero', $compromisoRecibo->factura->numero_factura);
+        } else {
+            $my_template->setValue('facturaNumero', '');
+        }
+
+        if (isset($clienteRecibo->celular)) {
+            $my_template->setValue('celularCliente', $clienteRecibo->celular);
+        } else {
+            $my_template->setValue('celularCliente', '');
+        }
+        if (isset($clienteRecibo->telefono)) {
+            $my_template->setValue('telefonoCliente', $clienteRecibo->telefono);
+        } else {
+            $my_template->setValue('telefonoCliente', '');
+        }
+
+
+
+        try {
+            $my_template->saveAs(public_path('ReciboGeneradoRecargosDanios.docx'));
+            header('Content-type: application/pdf');
+            header('Content-Disposition: attachment; filename="ReciboGeneradoRecargosDanios.docx"');
+            readfile(public_path('ReciboGeneradoRecargosDanios.docx'));
             return redirect('compromiso');
+        } catch (Exception $e) {
+            echo 'Hubo un error, comuníquese con el administrador del sistema';
         }
     }
 

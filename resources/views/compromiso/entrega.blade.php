@@ -72,12 +72,37 @@
         </div>  
 
         <div class="form-group col-md-6 ">
-            <label for="nombre">Abono </label>
-            <input   value = "{{$factura->abono}}"  type="number" class="form-control"  name ="abono" disabled>
+            <label for="nombre">Abonos </label>
+            <?php
+            if(count($compromiso->abonos)){
+               $valor_total_abonos = 0;
+               foreach($compromiso->abonos as $abono){
+                   $valor_total_abonos= $valor_total_abonos + $abono->valor;
+               }
+               $valor_total_abonos = $valor_total_abonos + $compromiso->factura->abono;
+               echo "<input   value = '".$valor_total_abonos."'  type='number' class='form-control'  name ='abono' disabled>";
+            }
+            
+            else{
+               echo "<input   value = '".$compromiso->factura->abono."'  type='number' class='form-control'  name ='abono' disabled>";
+                
+            }
+            
+            ?>
+            
+            
         </div> 
         <div class="form-group col-md-6 ">
             <label for="nombre">Depósito del Saldo</label>
+            @if(!is_null($factura->saldo_abonos ) ||  $factura->saldo_abonos === 0)
+            <input readonly="readonly" id="deposito_saldo"  type="number" class="form-control" value="{{$factura->saldo_abonos}}"  name ="deposito_saldo" >
+            @else
             <input readonly="readonly" id="deposito_saldo"  type="number" class="form-control" value="{{$factura->saldo}}"  name ="deposito_saldo" >
+
+            
+            @endif
+            
+            
         </div> 
         <div class="form-group col-md-6">
             <label for="nombre">Tipo de pago</label>

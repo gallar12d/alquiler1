@@ -16,8 +16,9 @@
 
             <th>Línea</th>
 
-            <th>Ajuste</th>
+           
             <th>Imagen</th>
+            <th>Ajuste</th>
 
         </tr>
 
@@ -42,12 +43,12 @@
             <td>{{$producto->producto->referencia}}</td>
 
             <td>{{$producto->producto->linea}}</td>
-            @if(isset($producto->producto->foto))
-            <td><a target="_blank" href ="{{ asset('fotosProductos/'. $producto->producto->foto)}}">Ver foto</a></td>
+                    @if(isset($producto->producto->foto))
+                    <td><a target="_blank" href ="{{ asset('fotosProductos/'. $producto->producto->foto)}}">Ver foto</a></td>
 
-            @else
-            <td>Sin imagen</td>
-            @endif
+                    @else
+                    <td>Sin imagen</td>
+                    @endif
 
             @else
 

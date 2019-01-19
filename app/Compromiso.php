@@ -29,4 +29,8 @@ class Compromiso extends Model
     public function compromisoproducto(){
         return $this->hasMany('App\Compromisoproducto', 'id_compromiso', 'id_compromiso');
     }
+    
+    public function abonos(){
+        return $this->hasMany('App\Abono', 'id_compromiso', 'id_compromiso');
+    }
 }

@@ -3,12 +3,12 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
+
 
 class CompromisoProducto extends Model
 {
     //
-    use SoftDeletes;
+    
     protected $table = 'compromiso_producto';
     protected $fillable = [ 'id_producto', 
     'id_compromiso', 'ajustes'] ;

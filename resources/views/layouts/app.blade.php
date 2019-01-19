@@ -41,19 +41,17 @@
                         <ul class="nav navbar-nav">
                             &nbsp;
                             @if (!Auth::guest())
-
                            
-                            <li><a href="{{ url('/inventario') }}">Inventario</a></li>
-                            
+                            <li><a href="{{ url('/inventario') }}">Inventario</a></li>                  
 
 
                             <li><a href="{{url('/compromiso')}}">Compromisos</a></li>
 
                             <li><a href="{{ url('/persona/c') }}">Clientes</a></li>
 
-
+                             @if(Auth::user()->rol != 'vendedor')
                             <li><a href="{{ url('/persona/u') }}">Usuarios</a></li>
-
+                            @endif
                             <li><a href="{{url('/cierre')}}">Cierre de caja</a></li>
                             <li class="dropdown">
                                 <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
@@ -70,10 +68,14 @@
                                         </a>   
                                         @if(Auth::user()->rol == 'administrador')
                                         <a href="{{ url('/proveedor') }}">Proveedores</a>
+                                         <a href="{{ url('/custodia') }}">Custodia</a>
                                         @endif
                                         <a href="{{url('/compromiso/pendientes')}}">Compromisos pendientes</a>
                                         <a href="{{url('/salida')}}">Salidas de caja</a>
                                         <a href="{{url('/venta')}}">Ventas</a>
+                                        <a href="{{url('/prestamo')}}">Préstamos</a>
+                                        <a href="{{url('/base')}}">Base</a>
+                                          <a href="{{url('/abonocaja')}}">Abonos a caja</a>
 
                                     </li>
                                 </ul>

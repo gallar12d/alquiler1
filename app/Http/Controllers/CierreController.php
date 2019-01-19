@@ -9,6 +9,11 @@ use App\Garantia;
 use App\Entrada;
 use App\Salida;
 use App\Novedad;
+use App\Base;
+use App\Abonocaja;
+use App\Abono;
+
+use App\PrestamoProducto;
 use Illuminate\Http\Request;
 
 class CierreController extends Controller {
@@ -33,9 +38,6 @@ class CierreController extends Controller {
     }
 
     public function generar(Request $data) {
-
-
-
         $fechaInicio = $data->input('fechaInicio');
 
         $fechaFin = $data->input('fechaFin');
@@ -70,6 +72,17 @@ class CierreController extends Controller {
         $ventas = Factura::where('fecha_pago', '>=', $fechaInicio)
                         ->where('fecha_pago', '<=', $fechaFin)
                         ->where('tipo', 'venta')->get();
+        
+         $prestamos = PrestamoProducto::where('fecha', '>=', $fechaInicio)
+                        ->where('fecha', '<=', $fechaFin)->get();
+         
+         $bases = Base::where('fecha', '>=', $fechaInicio)
+                        ->where('fecha', '<=', $fechaFin)->get();
+          $abonoscaja = Abonocaja::where('fecha', '>=', $fechaInicio)
+                        ->where('fecha', '<=', $fechaFin)->get();
+          
+          $abonosCompromiso = Abono::where('fecha', '>=', $fechaInicio)
+                        ->where('fecha', '<=', $fechaFin)->get();
 
 
 
@@ -79,7 +92,7 @@ class CierreController extends Controller {
 
 
 
-        return view('cierre.generado', compact('ventas', 'novedades', 'facturasAbonos', 'facturasSaldos', 'garantias', 'recargos', 'danios', 'salidas'));
+        return view('cierre.generado', compact('abonosCompromiso', 'abonoscaja','bases', 'prestamos', 'ventas', 'novedades', 'facturasAbonos', 'facturasSaldos', 'garantias', 'recargos', 'danios', 'salidas'));
     }
 
     /**

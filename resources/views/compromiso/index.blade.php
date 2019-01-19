@@ -33,8 +33,9 @@
                 <th>Cédula</th>
                 <th>Teléfono</th>    
                 <th>Celular</th>  
-                <th>Acciones</th>    
-                 <th>Ajustes establecidos</th>
+                <th>Acciones</th>  
+                <th>Abonos</th> 
+                <th>Ajustes establecidos</th>
 
 
             </tr>
@@ -67,20 +68,25 @@
                 <td>{{$com->persona->cedula}}</td>
                 <td>{{$com->persona->telefono}}</td>
                 <td>{{$com->persona->celular}}</td> 
-                
+
                 <td><a class="btnDetalleCompromiso" href="{{ url('compromiso/detalle/'.$com->id_compromiso) }}">Ver detalle </a><br>
                     @if($com->factura->estado == 'Pendiente' && $com->estado != 'Penalizado' )
-                       @if(Auth::user()->rol2 == 'superusuario')
-                        <a class="eliminarBtn" data-redirect="{{ url('/compromiso')}}" href="{{ url('/compromiso/eliminar/'.$com->id_compromiso) }}"> Anular</a><br>
-                        @endif
+                    @if(Auth::user()->rol2 == 'superusuario')
+                    <a class="eliminarBtn" data-redirect="{{ url('/compromiso')}}" href="{{ url('/compromiso/eliminar/'.$com->id_compromiso) }}"> Anular</a><br>
+                    @endif
                     <a href="{{url('/compromiso/entregar/'.$com->id_compromiso)}}">Entregar</a><br>
+                   
                     <a href="{{url('/compromiso/penalizar/'.$com->id_compromiso)}}">Penalizar</a>
                     @elseif ($com->factura->estado == 'Pagada' && $com->estado != 'Devuelto')
                     <a href="{{url('/compromiso/devolver/'.$com->id_compromiso)}}">Devolución</a><br>
                     <a href="{{url('/compromiso/penalizar/'.$com->id_compromiso)}}">Penalizar</a>          
                     @endif
-                </td>      
-                <td><label><input class="checkAjustar" data-url ="{{url('compromiso/ajustar/'.$com->id_compromiso)}} " type="checkbox" <?php echo ($com->ajustado)? 'checked': '' ?> value="1"></label></td>
+                </td>  
+                <td>
+                    <a href="{{url('/compromiso/abonar/'.$com->id_compromiso)}}">Abonos</a>
+                    
+                </td> 
+                <td><label><input class="checkAjustar" data-url ="{{url('compromiso/ajustar/'.$com->id_compromiso)}} " type="checkbox" <?php echo ($com->ajustado) ? 'checked' : '' ?> value="1"></label></td>
             </tr>
             @endforeach
             @else
@@ -113,6 +119,52 @@
     </form>
 
 </div>
+
+
+<hr>
+
+<div class=" col-md-11 col-md-offset-0.5">
+    <form method="post" action="{{url('compromiso/filtrar2')}}">
+        <input id="token" type="hidden" name="_token" value="{{ csrf_token() }}">
+        <div class="col-sm-6">
+            <div class="form-group">
+                <label for="email">Número de identificación:</label>
+                <input required type="number" class="form-control" name="cedula" id="">
+            </div>
+
+        </div>
+        <div class="col-sm-6">
+            <br>
+            <button type="submit" class="btn btn-default ">Filtrar</button>
+
+        </div>
+
+    </form>
+
+</div>
+
+<hr>
+<div class=" col-md-11 col-md-offset-0.5">
+    <form method="post" action="{{url('compromiso/filtrar2')}}">
+        <input id="token" type="hidden" name="_token" value="{{ csrf_token() }}">
+        <div class="col-sm-6">
+            <div class="form-group">
+                <label for="email">Número de factura:</label>
+                <input required type="number" class="form-control" name="factura" id="">
+            </div>
+
+        </div>
+        <div class="col-sm-6">
+            <br>
+            <button type="submit" class="btn btn-default ">Filtrar</button>
+
+        </div>
+
+    </form>
+
+</div>
+
+
 
 
 </div>
@@ -175,23 +227,22 @@
 
 
         });
-        $("input.checkAjustar").click( function(){
+        $("input.checkAjustar").click(function () {
             var url = $(this).attr('data-url');
-            if( $(this).is(':checked') ){
-                  $.get(url + '/a').done(function(data){
-                      if(data == 200){
-                          alert('El compromiso ha sido ajustado');
-                      }
-                  });
-            } 
-            else{
-                $.get(url + '/d').done(function(data){
-                      if(data == 200){
-                          alert('El compromiso ha dejado de estar  ajustado');
-                      }
-                  });
+            if ($(this).is(':checked')) {
+                $.get(url + '/a').done(function (data) {
+                    if (data == 200) {
+                        alert('El compromiso ha sido ajustado');
+                    }
+                });
+            } else {
+                $.get(url + '/d').done(function (data) {
+                    if (data == 200) {
+                        alert('El compromiso ha dejado de estar  ajustado');
+                    }
+                });
             }
-         });
+        });
     });
 </script>
 @endsection

@@ -500,7 +500,7 @@
 
 
 
-                                if (date1 < date2) {
+                                if (date1 > date2) {
 
 
 
@@ -512,10 +512,13 @@
 
                                     if (diff <= 3) {
 
-                                        textdisabled = 'disabled';
+                                       
 
                                     }
 
+                                }
+                                else if(date1 < date2){
+                                     textdisabled = 'disabled';
                                 }
 
                             } else {
@@ -532,9 +535,11 @@
 
                             var text = '<tr><td data-idproducto ="' + data.idpro + '"><input class="addproduct" type="checkbox" ' + textdisabled + ' value="' + data.idpro + '"></td><td>' + data.nombre + '</td><td>' + data.talla + '</td><td>' + data.color + '</td><td>' + data.referencia + '</td><td>' + data.estado_producto + '</td><td>' + data.valor + '</td><td>' + data.linea + '</td><td>' + data.fecha_devolucion + '</td></tr>'
 
+                             if (data.estado_producto != 'Vendido') {
+                                 $('#tableProductosmodal tbody').append(text);
+                            }
 
-
-                            $('#tableProductosmodal tbody').append(text);
+                          
 
                         })
 
@@ -659,11 +664,7 @@
 
 
 
-            if (fecha_compromiso) {
-
-                alert('Por favor seleccione la fecha de compromiso');
-
-            }
+            
 
 
             var fecha_compromiso = $('input#fecha_compromiso').val();
@@ -737,6 +738,15 @@
                 return 0;
 
             }
+            
+            if( (new Date(fecha_compromiso).getTime() > new Date(fecha_devolucion).getTime()))
+                {
+                    alert('La fecha de compromiso debe ser menor o igual a la fecha de devolucion');
+
+                    return 0;
+                }
+                
+
 
 
 

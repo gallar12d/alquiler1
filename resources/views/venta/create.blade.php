@@ -439,7 +439,7 @@
 
                             var textdisabled = "";
 
-                            if (data.estado_producto == 'Vendido' ||  data.estado_producto == 'Comprometido') {
+                            if (data.estado_producto == 'Vendido' ||  data.estado_producto == 'Comprometido' ||   data.estado_producto == 'Prestado' ) {
 
                                 textdisabled = 'disabled';
 
@@ -766,7 +766,7 @@
 
                         } else if (data == 200) {
 
-                            alert('Se ha creado el compromiso correctamente, puede descargar el recibo en el boton de abajo');
+                            alert('Se ha creado la venta correctamente, puede descargar el recibo en el boton de abajo');
 
                             $('a#btnDescargar').show();
 

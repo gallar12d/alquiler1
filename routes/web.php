@@ -52,9 +52,12 @@ Route::get('/compromiso/ajustar/{id_compromiso}/{option}', 'CompromisoController
 Route::post('/compromiso/crear', 'CompromisoController@crear');
 Route::post('/compromiso/editar', 'CompromisoController@postEditar');
 Route::post('/compromiso/entregar', 'CompromisoController@postEntregar');
+Route::post('/compromiso/abonar', 'CompromisoController@postAbonar');
+
 Route::post('/compromiso/penalizar', 'CompromisoController@postPenalizar');
 Route::post('/compromiso/devolucion', 'CompromisoController@postDevolucion');
 Route::post('/compromiso/filtrar', 'CompromisoController@postFiltrar');
+Route::post('/compromiso/filtrar2', 'CompromisoController@postFiltrar2');
 Route::get('/compromiso/pendientes', 'CompromisoController@getPendientes');
 
 Route::get('/compromiso/editar/{id}', 'CompromisoController@editar');
@@ -62,6 +65,7 @@ Route::get('/compromiso/eliminar/{id}', 'CompromisoController@eliminar');
 Route::get('/compromiso/entregar/{id}', 'CompromisoController@entregar');
 Route::get('/compromiso/penalizar/{id}', 'CompromisoController@penalizar');
 Route::get('/compromiso/devolver/{id}', 'CompromisoController@devolver');
+Route::get('/compromiso/abonar/{id}', 'CompromisoController@abonar');
 //routes compromiso
 Route::get('/entrega', 'EntregaController@index');
 Route::get('/entrega/create', 'EntregaController@create');
@@ -96,15 +100,31 @@ Route::post('/sede/edit', 'SedeController@postedit');
 
 Route::get('/venta', 'VentaController@index');
 Route::post('/venta/create', 'VentaController@postCreate');
-Route::post('/cierre/generar', 'CierreController@generar');
-Route::get('/novedad', 'NovedadController@index');
-Route::post('/novedad/create', 'NovedadController@create');
-Route::get('/sede', 'SedeController@index');
-Route::get('/sede/create', 'SedeController@getCreate');
-Route::get('/sede/delete/{id}', 'SedeController@getDelete');
-Route::get('/sede/edit/{id}', 'SedeController@getEdit');
-Route::post('/sede/create', 'SedeController@postCreate');
-Route::post('/sede/edit', 'SedeController@postedit');
+
+//prestamos
+
+Route::get('/prestamo', 'PrestamoController@index');
+Route::post('/prestamo/create', 'PrestamoController@postCreate');
+Route::get('/prestamo/pendientes', 'PrestamoController@getPendientes');
+
+//custodia
+
+Route::get('/custodia', 'CustodiaController@index');
+Route::post('/custodia/ingresar', 'CustodiaController@ingresar');
+Route::post('/custodia/debitar', 'CustodiaController@debitar');
+Route::post('/custodia/generar', 'CustodiaController@generar');
+
+//base
+
+Route::get('/base', 'BaseController@index');
+Route::post('/base/ingresar', 'BaseController@ingresar');
+
+//abonos a caja
+
+Route::get('/abonocaja', 'AbonocajaController@index');
+Route::post('/abonocaja/ingresar', 'AbonocajaController@ingresar');
+
+
 
 
 

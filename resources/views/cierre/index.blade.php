@@ -89,10 +89,12 @@
             var sumas = 0;
 
                 if(elementossuma.length){
+                    console.log(elementossuma)
 
                     $.each(elementossuma, function(k, v){
 
                         var valor = $(this).text();
+                        
 
                         valor =  parseInt(valor);
 
@@ -102,7 +104,7 @@
 
                     })
 
-                    
+                  
 
                 }
 

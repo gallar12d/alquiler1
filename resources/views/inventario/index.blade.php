@@ -208,6 +208,11 @@
                     processData: false
                 }).done(function (data) {
                     if (data) {
+                        if(data == 202){
+                            alert('Ya existe un producto con esa referencia');
+                            return 0;
+                        }
+                        
                         alert('Se ha creado el producto exitosamente');
                         $('#modalCreateProduct').modal('hide');
                         location.reload();

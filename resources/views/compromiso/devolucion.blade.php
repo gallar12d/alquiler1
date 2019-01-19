@@ -122,7 +122,7 @@
 
     <hr />
 
-    <form class="formsubmit" method="post" action="{{ url('/compromiso/devolucion') }}">
+    <form  id ="formDevolucion" class="formsubmit" method="post" action="{{ url('/compromiso/devolucion') }}">
 
         <input id="token" type="hidden" name="_token" value="{{ csrf_token() }}">
 
@@ -145,17 +145,41 @@
         <div class="form-group col-md-6 ">
 
             <label for="nombre">Abono </label>
+            
+            @if(count($compromiso->abonos))
+                <?php 
+                
+                $valorTotalAbonos = 0;
+                foreach($compromiso->abonos as $abono){
+                    $valorTotalAbonos = $valorTotalAbonos + $abono->valor;
+                                      
+                }                
+                $valorTotalAbonos = $valorTotalAbonos + $factura->abono;
+                ?>
+            <input   value = "{{$valorTotalAbonos}}"  type="number" class="form-control"  name ="abono" disabled>
+           
+            @else
+             <input   value = "{{$factura->abono}}"  type="number" class="form-control"  name ="abono" disabled>
+           
+            @endif
 
-            <input   value = "{{$factura->abono}}"  type="number" class="form-control"  name ="abono" disabled>
 
         </div> 
 
         <div class="form-group col-md-6 ">
+            
 
             <label for="nombre">Depósito del Saldo</label>
+            
+            @if(count($compromiso->abonos))
+            <input disabled id="deposito_saldo"  type="number" class="form-control" value="{{$factura->saldo_abonos}}"  name ="deposito_saldo" >
 
+            @else
             <input disabled id="deposito_saldo"  type="number" class="form-control" value="{{$factura->saldo}}"  name ="deposito_saldo" >
 
+            @endif
+
+            
         </div> 
 
         <div class="form-group col-md-6">
@@ -205,7 +229,7 @@
 
             <div class ="col-md-12">               
 
-                <button type ="submit"  class=" pull-right col-md-3 btn btn-default ">Reintegrar productos</button>
+                <button  id="btnSubmit" type ="submit"  class=" pull-right col-md-3 btn btn-default ">Reintegrar productos</button>
 
             </div>  
 
@@ -238,6 +262,11 @@
 <script type="text/javascript">
 
     $(document).ready(function () {
+        
+      $(document).on('submit', 'form#formDevolucion', function(){
+          
+          $('#btnSubmit').hide();
+      });  
 
       $(document).on('change', 'select#malas_condiciones', function(){
 

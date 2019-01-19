@@ -25,11 +25,12 @@
         </div>
         <div class="form-group">
             <label for="nombre">Estado</label>
-            <select id='estado' class="form-control" name = "estado" >
+            <select <?php echo ($producto->estado == 'Comprometido' || $producto->estado == 'Alquilado' )? 'disabled':'' ?> id='estado' class="form-control" name = "estado" >
                 <option <?php echo ($producto->estado == 'Disponible') ? "selected" : '' ?> value="Disponible">Disponible</option>
                 <option <?php echo ($producto->estado == 'lavandería') ? "selected" : '' ?> value="lavandería">lavandería</option>
                 <option <?php echo ($producto->estado == 'Alquilado') ? "selected" : '' ?> value="Alquilado">Alquilado</option>
                 <option <?php echo ($producto->estado == 'Prestado') ? "selected" : '' ?> value ="Prestado">Prestado</option>
+                <option <?php echo ($producto->estado == 'Comprometido') ? "selected" : '' ?> value ="Comprometido">Comprometido</option>
 
             </select>
         </div>
