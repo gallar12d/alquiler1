@@ -1,0 +1,13 @@
+// configurar el vhost 
+
+<VirtualHost *:80>
+  ServerName tequendama
+  ServerAlias www.tequendama.com
+  DocumentRoot "C:\wamp64_2\www\alquiler1\public"
+  <Directory "C:\wamp64_2\www\alquiler1\public">
+    Options FollowSymLinks Includes
+    AllowOverride All
+    Order allow,deny
+    Allow from all
+  </Directory>
+</VirtualHost>
