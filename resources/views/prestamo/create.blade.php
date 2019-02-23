@@ -2,7 +2,8 @@
 
 @section('content')
 
-<div class="col-md-10 col-md-offset-1">
+<div class="row">
+    <div class="col-md-10 col-md-offset-1">
     <a href="{{url('prestamo/pendientes')}}" class="  col-md-3 btn btn-default  pull-right">Listado préstamos vencidos</a>
     <hr>
 
@@ -228,6 +229,9 @@
     </form>
 
 </div>
+</div>
+
+
 
 <br>
 <br>
