@@ -113,7 +113,7 @@
                         <select id="estado" class="form-control" name = "estado" >         
                             <option selected value="Disponible">Disponible</option>
                             <option value="lavandería">lavandería</option>
-                            <option value="Alquilado">Alquilado</option>
+                            
                             <option value ="Prestado">Prestado</option>
 
                         </select>

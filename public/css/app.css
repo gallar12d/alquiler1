@@ -16,3 +16,12 @@
 .row {
     margin-top: 35px;
 }
+
+
+
+
+.navbar-inverse>li>a {
+    
+    color: #a9a9a9;
+    
+}

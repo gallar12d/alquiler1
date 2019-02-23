@@ -58,7 +58,7 @@
                                     Otros <span class="caret"></span>
                                 </a>
 
-                                <ul class="dropdown-menu" role="menu">
+                                <ul class="dropdown-menu navbar-inverse" role="menu">
                                     <li>
                                         <a href="{{url('/novedad')}}">
                                             Registrar novedad
