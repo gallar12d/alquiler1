@@ -17,7 +17,7 @@
     </head>
     <body>
         <div id="app">
-            <nav class="navbar navbar-default navbar-static-top">
+            <nav class="navbar navbar-inverse navbar-static-top">
                 <div class="container">
                     <div class="navbar-header">
 
@@ -74,7 +74,7 @@
                                         <a href="{{url('/compromiso/pendientes')}}">Compromisos pendientes</a>
                                         <a href="{{url('/salida')}}">Salidas de caja</a>
                                         <a href="{{url('/venta')}}">Vender producto</a>
-                                        <a href="{{url('/prestamo')}}">Perstar producto</a>
+                                        <a href="{{url('/prestamo')}}">Prestar producto </a>
                                         @if(Auth::user()->rol != 'vendedor')
                                         <a href="{{url('/base')}}">Base</a>
                                         @endif
