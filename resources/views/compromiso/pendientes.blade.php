@@ -5,7 +5,7 @@
     <div class="row">
         <div class="col-md-12">
             <div class="col-sm-6">
-                <h2>Listado de compromisos</h2>
+                <h2>Listado de compromisos pendientes</h2>
             </div>
             <div class="col-sm-6">
                 <div class="text-right">
