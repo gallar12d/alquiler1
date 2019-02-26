@@ -17,7 +17,7 @@
     </head>
     <body>
         <div id="app">
-            <nav class="navbar navbar-default navbar-static-top">
+            <nav class="navbar navbar-inverse navbar-static-top">
                 <div class="container">
                     <div class="navbar-header">
 
@@ -58,23 +58,27 @@
                                     Otros <span class="caret"></span>
                                 </a>
 
-                                <ul class="dropdown-menu" role="menu">
+                                <ul class="dropdown-menu navbar-inverse" role="menu">
                                     <li>
                                         <a href="{{url('/novedad')}}">
                                             Registrar novedad
                                         </a>    
                                         <a href="{{url('/sede')}}">
                                             Sedes
-                                        </a>   
-                                        @if(Auth::user()->rol == 'administrador')
+                                        </a>  
                                         <a href="{{ url('/proveedor') }}">Proveedores</a>
+                                        @if(Auth::user()->rol == 'administrador')
+                                        
                                          <a href="{{ url('/custodia') }}">Custodia</a>
                                         @endif
                                         <a href="{{url('/compromiso/pendientes')}}">Compromisos pendientes</a>
                                         <a href="{{url('/salida')}}">Salidas de caja</a>
-                                        <a href="{{url('/venta')}}">Ventas</a>
-                                        <a href="{{url('/prestamo')}}">Préstamos</a>
+                                        <a href="{{url('/venta')}}">Vender producto</a>
+                                        <a href="{{url('/prestamo')}}">Prestar producto </a>
+                                        @if(Auth::user()->rol != 'vendedor')
                                         <a href="{{url('/base')}}">Base</a>
+                                        @endif
+                                        
                                           <a href="{{url('/abonocaja')}}">Abonos a caja</a>
 
                                     </li>

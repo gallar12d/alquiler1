@@ -89,7 +89,7 @@
             if (method == 'post') {
                 $.post(url, data).done(function (data) {
                     if (data) {
-                        alert('Se ha editado el producto exitosamente');
+                        alert('Se ha editado el cliente exitosamente');
                         var urlredirect = form.attr('data-redirect')
                         window.location.href = urlredirect;
 

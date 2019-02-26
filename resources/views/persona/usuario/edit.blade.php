@@ -8,7 +8,7 @@
 
 <div class = "col-md-8 col-md-offset-2">
 
-<h2>Editar cliente</h2>
+<h2>Editar Usuario</h2>
 
 <form class="formsubmit" method="post"  data-redirect = "{{ url('/persona/u') }}" action="{{ url('/persona/editar') }}">
 
@@ -67,6 +67,13 @@
           <label for="nombre">Correo electrónico *</label>
 
           <input required type="email" class="form-control"  value = "{{$persona->email}}" name ="email">
+
+        </div>
+      <div class="form-group">
+
+          <label for="nombre">Contraseña*</label>
+
+          <input required type="password" class="form-control"  value = "{{$persona->pass}}" name ="password">
 
         </div>
 
