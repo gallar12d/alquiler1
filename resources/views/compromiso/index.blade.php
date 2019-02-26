@@ -79,12 +79,13 @@
                     <a href="{{url('/compromiso/penalizar/'.$com->id_compromiso)}}">Penalizar</a>
                     @elseif ($com->factura->estado == 'Pagada' && $com->estado != 'Devuelto')
                     <a href="{{url('/compromiso/devolver/'.$com->id_compromiso)}}">Devolución</a><br>
-                    <a href="{{url('/compromiso/penalizar/'.$com->id_compromiso)}}">Penalizar</a>          
+                   <!-- <a href="{{url('/compromiso/penalizar/'.$com->id_compromiso)}}">Penalizar</a>   -->       
                     @endif
                 </td>  
                 <td>
+                    @if($com->factura->estado == 'Pendiente')
                     <a href="{{url('/compromiso/abonar/'.$com->id_compromiso)}}">Abonos</a>
-                    
+                    @endif
                 </td> 
                 <td><label><input class="checkAjustar" data-url ="{{url('compromiso/ajustar/'.$com->id_compromiso)}} " type="checkbox" <?php echo ($com->ajustado) ? 'checked' : '' ?> value="1"></label></td>
             </tr>
