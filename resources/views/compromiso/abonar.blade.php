@@ -48,7 +48,7 @@
                 <input  type="hidden"  class="form-control" name ="id_compromiso" value="{{$compromiso->id_compromiso}}">
 
             </div>
-            @if($compromiso->factura->estado == 'Pendiente')
+            @if($compromiso->factura->estado == 'Pendiente' &&  $compromiso->factura->saldo != 0)
             <div class="form-group col-md-4">
                 <br>
                 <button id="btnIngresarAbono" type="submit" class="btn btn-default">Ingresar abono</button>
@@ -65,7 +65,7 @@
 
         <h3>Historial de abonos</h3>
 
-        @if(count($compromiso->abonos))
+       
         <table class="table table-striped">
             <thead>
                 <tr>
@@ -75,6 +75,20 @@
                 </tr>
             </thead>
             <tbody>
+
+                <tr>                
+                    
+                    <?php
+                        $date = new DateTime($compromiso->factura->created_at);
+                       
+                    ?>
+
+                    
+                    <td> {{ $date->format('Y-m-d')}}</td>
+                    <td>{{$compromiso->factura->abono}}</td>
+                    <td>{{$compromiso->factura->numero_factura}}</td>
+                </tr>
+                @if(count($compromiso->abonos))
                 <?php
                 $totalAbonos = 0;
                 ?>
@@ -86,18 +100,18 @@
                     <td>{{$abono->fecha}}</td>
                     <td>{{$abono->valor}}</td>
                     <td>{{$compromiso->factura->numero_factura}}</td>
-                </tr
+                </tr>
                 @endforeach             
             </tbody>
             <tfoot>
                 <tr>
                     <td><strong>total abonos</strong></td>
-                    <td><strong>{{$totalAbonos}}</strong></td>
+                    <td><strong>{{$totalAbonos + $compromiso->factura->abono}}</strong></td>
                 </tr>
             </tfoot>
         </table>
         @else
-        <h4>No existen abonos</h4>
+        <h4></h4>
         @endif
     </div>
 

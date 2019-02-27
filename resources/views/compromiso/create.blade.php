@@ -745,6 +745,11 @@
 
                     return 0;
                 }
+
+
+           if(!confirm('Está seguro que toda la iformación está correcta?')){
+            return 0;
+           }  
                 
 
 

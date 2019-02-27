@@ -924,6 +924,7 @@ class CompromisoController extends Controller {
             $nuevaentrada->concepto = 'Pago por daños de compromiso con factura No ' . $compromisoModificar->factura->numero_factura;
             $nuevaentrada->valor = $request->valor_danio;
             $nuevaentrada->tipo = 'Daños';
+            $nuevaentrada->metodo_pago = $request->metodo_pago;
             $nuevaentrada->save();
 
             //hay que entregar recibo

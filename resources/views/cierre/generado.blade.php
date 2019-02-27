@@ -43,7 +43,7 @@
             <th>Valor</th>
 
             <th>Fecha</th>
-            <th>Observación</th>
+           
 
         </tr>
 
@@ -579,11 +579,16 @@
 
         <tr>
 
-
-
             <td>{{$fac->concepto}}</td>
 
+            
+            @if($fac->metodo_pago == 'Tarjeta')
+
+             <td class="sumas tarjeta">{{$fac->valor}}</td>
+
+            @else
             <td class="sumas">{{$fac->valor}}</td>
+            @endif
 
             <td>{{$fac->created_at->format('Y-m-d')}}</td>
 

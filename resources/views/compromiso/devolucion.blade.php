@@ -206,6 +206,14 @@
             <input disabled id="valor_danio"  type="number" class="form-control"   name ="valor_danio" >
 
         </div> 
+        <div class="form-group col-md-8">
+          <label for="nombre">Método de pago</label>
+          <select disabled id="metodo_pago" class="form-control" name = 'metodo_pago' >
+          <option value="Efectivo">Efectivo</option>  
+            <option value="Tarjeta">Tarjeta</option>     
+          </select>
+
+        </div>  
 
         <div class="form-group col-md-12 ">
 
@@ -285,6 +293,9 @@
            $('input#valor_danio').prop('disabled', false);
 
            $('input#valor_danio').attr('disabled', false); 
+           $('select#metodo_pago').attr('disabled', false); 
+
+           
 
 
 
@@ -301,6 +312,7 @@
            $('input#valor_danio').prop('disabled', true);
 
            $('input#valor_danio').attr('disabled', true); 
+           $('select#metodo_pago').attr('disabled', true); 
 
           }
 
