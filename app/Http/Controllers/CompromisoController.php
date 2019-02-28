@@ -76,12 +76,20 @@ class CompromisoController extends Controller {
         $id_cliente = $data->input('id_cliente');
         $productos = $data->input('productos');
         $descuento = $data->input('descuento');
+        $descuentoviejo = 0;
 
         if ($descuento == 0) {
             //modificar el usuario y poner el descuento en 0
             $userModificarDescuento = Persona::where('cedula', $id_cliente)->first();
+            $descuentoviejo = $userModificarDescuento->descuento;
             $userModificarDescuento->descuento = 0;
             $userModificarDescuento->save();
+        }
+        else{
+            $userModificarDescuento = Persona::where('cedula', $id_cliente)->first();
+            $descuentoviejo = $userModificarDescuento->descuento;
+            
+
         }
 
 
@@ -246,6 +254,10 @@ class CompromisoController extends Controller {
                             $total2 = intval($abono) + intval($saldo);
                         }
 
+                        if($descuentoviejo != 0){
+                            $total2 = $total2. ' ( %'.$descuentoviejo.')';
+                        }
+
 
 
 
@@ -319,7 +331,7 @@ class CompromisoController extends Controller {
             foreach ($productosRecibo as $prod) {
                 $id = $prod[0];
                 $buscadoProducto = Producto::find($id);
-                $my_template->setValue('p' . $j, $buscadoProducto->nombre . ' - (' . $buscadoProducto->referencia . ')');
+                $my_template->setValue('p' . $j,  '('.$buscadoProducto->referencia.') - '.$buscadoProducto->nombre );
                 $my_template->setValue('v' . $j, $buscadoProducto->valor);
                 $j++;
             }
@@ -335,7 +347,7 @@ class CompromisoController extends Controller {
             foreach ($productosRecibo as $prod) {
                 $id = $prod[0];
                 $buscadoProducto = Producto::find($id);
-                $my_template->setValue('p' . $j, $buscadoProducto->nombre . ' - (' . $buscadoProducto->referencia . ')');
+                $my_template->setValue('p' . $j,  '('.$buscadoProducto->referencia.') - '.$buscadoProducto->nombre );
                 $my_template->setValue('v' . $j, $buscadoProducto->valor);
                 $j++;
             }
@@ -390,7 +402,8 @@ class CompromisoController extends Controller {
             foreach ($productosRecibo as $prod) {
                 $id = $prod;
                 $buscadoProducto = Producto::find($id);
-                $my_template->setValue('p' . $j, $buscadoProducto->nombre . '- (' . $buscadoProducto->referencia . ')');
+               
+                $my_template->setValue('p' . $j,  '('.$buscadoProducto->referencia.') - '.$buscadoProducto->nombre );
                 $my_template->setValue('v' . $j, $buscadoProducto->valor);
                 $j++;
             }
@@ -406,7 +419,8 @@ class CompromisoController extends Controller {
             foreach ($productosRecibo as $prod) {
                 $id = $prod;
                 $buscadoProducto = Producto::find($id);
-                $my_template->setValue('p' . $j, $buscadoProducto->nombre . '- (' . $buscadoProducto->referencia . ')');
+                
+                $my_template->setValue('p' . $j,  '('.$buscadoProducto->referencia.') - '.$buscadoProducto->nombre );
                 $my_template->setValue('v' . $j, $buscadoProducto->valor);
                 $j++;
             }
