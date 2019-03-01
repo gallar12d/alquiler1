@@ -35,7 +35,7 @@
 
                             <a id="btnBuscarCliente" >
 
-                                <span class="glyphicon glyphicon-search"></span>
+                            <span class="">Buscar</span>
 
                             </a>  
 
@@ -103,7 +103,7 @@
 
                             <a id="btnBuscarProducto">
 
-                                <span class="glyphicon glyphicon-search"></span>
+                            <span class="">Buscar</span>
 
                             </a>  
 

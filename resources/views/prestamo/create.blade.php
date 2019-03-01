@@ -100,7 +100,7 @@
 
                             <a id="btnBuscarProducto">
 
-                                <span class="glyphicon glyphicon-search"></span>
+                                <span class="">Buscar</span>
 
                             </a>  
 
