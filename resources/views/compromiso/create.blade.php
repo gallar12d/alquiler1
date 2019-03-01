@@ -36,12 +36,12 @@
                         <input id="buscarCliente" data-url="{{url('/persona/buscarcliente')}}" type="text" class="form-control"  placeholder="Buscar cliente" >
 
                         <input id="idCliente" type="hidden"   type="number" class="form-control" name ="id_cliente">
-
+                        
                         <span class="input-group-addon">
 
                             <a id="btnBuscarCliente" >
 
-                                <span class="glyphicon glyphicon-search"></span>
+                                <span class="">Buscar</span>
 
                             </a>  
 
@@ -116,7 +116,7 @@
 
                             <a id="btnBuscarProducto">
 
-                                <span class="glyphicon glyphicon-search"></span>
+                            <span class="">Buscar</span>
 
                             </a>  
 

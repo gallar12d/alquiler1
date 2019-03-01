@@ -974,7 +974,7 @@ class CompromisoController extends Controller {
             }
 
             // poner la garantia en estado 0
-            $garantiaQuitar->estado = 0;
+            $garantiaQuitar->estado = 1;
             $garantiaQuitar->save();
         }
 
