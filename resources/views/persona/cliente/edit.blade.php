@@ -43,7 +43,7 @@
             <label for="nombre">Celular referencia *</label>
             <input required type="text" class="form-control" value="{{$persona->referencia_celular}}" name ="referencia_celular">
         </div>
-        @if(Auth::user()->rol != 'vendedor')
+        
         <div class="form-group">
             <label for="nombre">Descuento %</label>
 
@@ -51,9 +51,9 @@
                 <option <?php echo ($persona->descuento == 0) ? 'selected' : ''; ?> value="0">0%</option>   
                 <option <?php echo ($persona->descuento == 10) ? 'selected' : ''; ?> value="10">10%</option>   
                 <option <?php echo ($persona->descuento == 15) ? 'selected' : ''; ?> value="15">15%</option>   
-
+                <option <?php echo ($persona->descuento == 20) ? 'selected' : ''; ?> value="20">20%</option> 
             </select>
-            @endif  
+             
         </div>
         <input type="hidden"   type="text" class="form-control"  value="{{$persona->sexo}}" name ="sexo">
         <input type="hidden" value="c"  type="text" class="form-control"  name ="tipo">

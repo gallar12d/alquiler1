@@ -479,7 +479,7 @@
 
             <td>Ingreso de base</td>
 
-            <td class="sumas">{{$fac->valor}}</td>
+            <td class="sumas base">{{$fac->valor}}</td>
 
             <td>{{$fac->fecha}}</td>
 
@@ -664,7 +664,9 @@
 
 
 
+<h3>Total Ventas</h3>
 
+<span id="totalventas"></span>
 
 <h3>Total Efectivo</h3>
 

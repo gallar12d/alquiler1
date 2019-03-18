@@ -85,6 +85,7 @@
                             <div id="checkboxDescuento">
                                 <label><input id="checkboxDesc" checked type="checkbox" value="">No aplica</label>
                             </div>
+                            <a target="_blank" href="/persona/c" class="href">Modificar descuento</a>
                         </td>  
 
 

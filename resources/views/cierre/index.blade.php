@@ -135,7 +135,7 @@
                 var total = sumas - resta;
 
                 
-
+                total2 = total;
                
 
 
@@ -173,6 +173,36 @@
                     
 
                 }
+
+
+                var elementosbase = $('.base');
+
+            var sumasBase = 0;
+
+                if(elementosbase.length){
+
+                    $.each(elementosbase, function(k, v){
+
+                        var valor = $(this).text();
+
+                        valor =  parseInt(valor);
+
+                        sumasBase = sumasBase + valor;
+
+
+
+                    });
+
+                    
+
+                }
+
+                if(){
+                    
+                }
+
+                $('#totalventas').text(total2 - sumasBase + ' Pesos');
+
 
                 $('#totalTarjeta').text(sumas2+' Pesos');
 
