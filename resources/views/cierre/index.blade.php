@@ -197,9 +197,7 @@
 
                 }
 
-                if(){
-                    
-                }
+                
 
                 $('#totalventas').text(total2 - sumasBase + ' Pesos');
 
