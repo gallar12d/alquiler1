@@ -27,7 +27,7 @@
 </div>
 
 @endif
-<h2>Abonos </h2>
+<h2>Abonos y facturas viejas </h2>
 
 <table class="table table-striped">
 
@@ -72,6 +72,57 @@
             @else
             <td></td> @endif </tr> @empty <tr>
         </tr>
+
+        @endforelse
+        @forelse ($facturasSaldos as $fac)
+
+        <tr>
+
+            <td>{{$fac->numero_factura}}</td>
+
+            <td>Pago total a compromiso</td>
+
+            @if($fac->metodo_pago_saldo == 'Tarjeta')
+
+                @if(!is_null($fac->saldo_abonos) || $fac->saldo_abonos === 0)
+                    @if($fac->estado == 'Anulada')
+                    <td><strike>{{$fac->saldo_abonos}}</strike></td>
+                    @else
+                    <td class="sumas tarjeta">{{$fac->saldo_abonos}}</td>
+                    @endif
+
+                @else
+                    @if($fac->estado == 'Anulada')
+                    <td><strike>{{$fac->saldo}}</strike></td>
+                    @else
+                    <td class="sumas tarjeta">{{$fac->saldo}}</td>
+                    @endif
+
+            @endif
+            @else
+                @if(!is_null($fac->saldo_abonos) || $fac->saldo_abonos === 0)
+
+                    @if($fac->estado == 'Anulada')
+                    <td><strike>{{$fac->saldo_abonos}}</strike></td>
+                    @else
+                    <td class="sumas">{{$fac->saldo_abonos}}</td>
+                    @endif
+
+
+                @else
+                    @if($fac->estado == 'Anulada')
+                    <td><strike>{{$fac->saldo}}</strike></td>
+                    @else
+                    <td class="sumas">{{$fac->saldo}}</td>
+                    @endif
+
+            @endif
+
+            @endif
+            <td>{{$fac->created_at->format('Y-m-d')}}</td>
+        </tr>
+        @empty
+
 
         @endforelse
 
@@ -153,59 +204,7 @@
 
 
         @endforelse
-        @forelse ($facturasSaldos as $fac)
-
-        <tr>
-
-            <td>{{$fac->numero_factura}}</td>
-
-            <td>Saldos</td>
-
-            @if($fac->metodo_pago_saldo == 'Tarjeta')
-
-            @if(!is_null($fac->saldo_abonos) || $fac->saldo_abonos === 0)
-            @if($fac->estado == 'Anulada')
-            <td><strike>{{$fac->saldo_abonos}}</strike></td>
-            @else
-            <td class="sumas tarjeta">{{$fac->saldo_abonos}}</td>
-            @endif
-
-            @else
-            @if($fac->estado == 'Anulada')
-            <td><strike>{{$fac->saldo}}</strike></td>
-            @else
-            <td class="sumas tarjeta">{{$fac->saldo}}</td>
-            @endif
-
-
-
-            @endif
-            @else
-            @if(!is_null($fac->saldo_abonos) || $fac->saldo_abonos === 0)
-
-            @if($fac->estado == 'Anulada')
-            <td><strike>{{$fac->saldo_abonos}}</strike></td>
-            @else
-            <td class="sumas">{{$fac->saldo_abonos}}</td>
-            @endif
-
-
-            @else
-            @if($fac->estado == 'Anulada')
-            <td><strike>{{$fac->saldo}}</strike></td>
-            @else
-            <td class="sumas">{{$fac->saldo}}</td>
-            @endif
-
-            @endif
-
-            @endif
-            <td>{{$fac->created_at->format('Y-m-d')}}</td>
-        </tr>
-        @empty
-
-
-        @endforelse
+        
 
 
 

@@ -134,7 +134,7 @@
                     processData: false
                 }).done(function (data) {
                     if (data) {
-                        alert('Se ha editadp el producto exitosamente');
+                        alert('Se ha editado el producto exitosamente');
                         var urlredirect = form.attr('data-redirect')
                         window.location.href = urlredirect;
 
