@@ -413,6 +413,10 @@ $(document).ready(function() {
                         .descuento);
                     $('input#idCliente').val(data.cedula);
 
+                    //dar dos clicks al boton de descuento
+                    $('#checkboxDesc').click();
+                    $('#checkboxDesc').click();
+
                 } else {
 
                     alert('No se ha encontrado al cliente');
