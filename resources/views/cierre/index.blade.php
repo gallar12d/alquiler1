@@ -63,54 +63,47 @@
 <script type="text/javascript">
 
     $(document).on('submit', 'form.formsubmit', function(e){
-
     e.preventDefault();
-
 
 
     data = $(this).serialize();
 
     url = $(this).attr('action');
 
-
-
     $.post(url, data).done(function(data){
 
         if(data){
-
             
 
             $('div.cierreGenerado').html(data);
 
+            totalFacturasNuevas();
+            totalAbonos();
+            totalGarantias();
+            totalRecargos();
+            totalVentas();
+            totalPrestamos();
+            totalDaños();
+            totalBases();
+            totalAbonosCaja();
+            totalRestas();
+
             // realizar cálculos
-
             var elementossuma = $('.sumas');
-
             var sumas = 0;
-
                 if(elementossuma.length){
-                    console.log(elementossuma)
-
+                    
                     $.each(elementossuma, function(k, v){
-
-                        var valor = $(this).text();
-                        
+                        var valor = $(this).text();                   
 
                         valor =  parseInt(valor);
-
                         sumas = sumas + valor;
-
-
-
                     })
-
-                  
-
                 }
 
                 var elementosresta = $('.restas');
 
-            var resta = 0;
+                var resta = 0;
 
                 if(elementosresta.length){
 
@@ -213,12 +206,131 @@
 
 
     })
-
-
-
-
-
 })
+
+function totalFacturasNuevas(){
+    var elementos = $('.facturaNueva');
+    var suma = 0;
+    if(elementos.length){
+        $.each(elementos, function(k,v){
+            var valor = $(v).text();
+            suma = parseInt(suma) + parseInt(valor);
+        });
+    }
+   
+    $('#totalFacturasNuevas').text(suma);
+}
+function totalAbonos(){
+    var elementos = $('.abono');
+    var suma = 0;
+    if(elementos.length){
+        $.each(elementos, function(k,v){
+            var valor = $(v).text();
+            suma = parseInt(suma) + parseInt(valor);
+        });
+    }
+   
+    $('#totalAbonos').text(suma);
+}
+function totalGarantias(){
+    var elementos = $('.garantia');
+    var suma = 0;
+    if(elementos.length){
+        $.each(elementos, function(k,v){
+            var valor = $(v).text();
+            suma = parseInt(suma) + parseInt(valor);
+        });
+    }
+   
+    $('#totalGarantias').text(suma);
+}
+function totalRecargos(){
+    var elementos = $('.recargo');
+    var suma = 0;
+    if(elementos.length){
+        $.each(elementos, function(k,v){
+            var valor = $(v).text();
+            suma = parseInt(suma) + parseInt(valor);
+        });
+    }
+   
+    $('#totalRecargos').text(suma);
+}
+function totalVentas(){
+    var elementos = $('.venta');
+    var suma = 0;
+    if(elementos.length){
+        $.each(elementos, function(k,v){
+            var valor = $(v).text();
+            suma = parseInt(suma) + parseInt(valor);
+        });
+    }
+   
+    $('#totalVentas').text(suma);
+}
+function totalPrestamos(){
+    var elementos = $('.prestamo');
+    var suma = 0;
+    if(elementos.length){
+        $.each(elementos, function(k,v){
+            var valor = $(v).text();
+            suma = parseInt(suma) + parseInt(valor);
+        });
+    }
+   
+    $('#totalPrestamos').text(suma);
+}
+function totalDaños(){
+    var elementos = $('.daño');
+    var suma = 0;
+    if(elementos.length){
+        $.each(elementos, function(k,v){
+            var valor = $(v).text();
+            suma = parseInt(suma) + parseInt(valor);
+        });
+    }
+   
+    $('#totalDaños').text(suma);
+}
+function totalBases(){
+    var elementos = $('.basesuma');
+    var suma = 0;
+    if(elementos.length){
+        $.each(elementos, function(k,v){
+            var valor = $(v).text();
+            suma = parseInt(suma) + parseInt(valor);
+        });
+    }
+   
+    $('#totalBases').text(suma);
+}
+function totalAbonosCaja(){
+    var elementos = $('.abonoCaja');
+    var suma = 0;
+    if(elementos.length){
+        $.each(elementos, function(k,v){
+            var valor = $(v).text();
+            suma = parseInt(suma) + parseInt(valor);
+        });
+    }
+   
+    $('#totalAbonosCaja').text(suma);
+}
+function totalRestas(){
+    var elementos = $('.resta');
+    var suma = 0;
+    if(elementos.length){
+        $.each(elementos, function(k,v){
+            var valor = $(v).text();
+            suma = parseInt(suma) + parseInt(valor.substring(2));
+        });
+    }
+   
+    $('#totalRestas').text(suma);
+}
+
+
+
 
 </script>
 
