@@ -45,7 +45,8 @@ class CierreController extends Controller {
         $facturasAbonos = Factura::whereNotNull('metodo_pago')
                         ->where('created_at', '>=', $fechaInicio)
                         ->where('created_at', '<=', $fechaFin)->whereNull('tipo')->orderBy('numero_factura', 'asc')->get();
-
+                       
+        $totalFacturasAbonos = Factura::whereNotNull('metodo_pago')->where('created_at', '>=', $fechaInicio)->where('created_at', '<=', $fechaFin)->whereNull('tipo')->sum('abono');
         $facturasSaldos = Factura::whereNotNull('metodo_pago_saldo')
                         ->where('created_at', '>=', $fechaInicio)
                         ->where('created_at', '<=', $fechaFin)                
@@ -92,7 +93,7 @@ class CierreController extends Controller {
 
 
 
-        return view('cierre.generado', compact('abonosCompromiso', 'abonoscaja','bases', 'prestamos', 'ventas', 'novedades', 'facturasAbonos', 'facturasSaldos', 'garantias', 'recargos', 'danios', 'salidas'));
+        return view('cierre.generado', compact('totalFacturasAbonos','abonosCompromiso', 'abonoscaja','bases', 'prestamos', 'ventas', 'novedades', 'facturasAbonos', 'facturasSaldos', 'garantias', 'recargos', 'danios', 'salidas'));
     }
 
     /**

@@ -59,18 +59,23 @@
             <td>Abono a compromiso</td>
 
             @if($fac->factura->estado == 'Anulada')
-            <td><strike>{{$fac->valor}}</strike></td>
+                <td><strike>{{$fac->valor}}</strike></td>
             @else
-            <td class="sumas">{{$fac->valor}}</td>
+                <td class="sumas abono">{{$fac->valor}}</td>
             @endif
 
 
             <td>{{$fac->fecha}}</td>
 
             @if($fac->factura->estado == 'Anulada')
-            <td><strike>Factura anulada</strike></td>
+                <td><strike>Factura anulada</strike></td>
             @else
-            <td></td> @endif </tr> @empty <tr>
+                <td>
+                </td>
+            @endif
+            </tr> 
+            @empty 
+            <tr>
         </tr>
 
         @endforelse
@@ -88,14 +93,14 @@
                     @if($fac->estado == 'Anulada')
                     <td><strike>{{$fac->saldo_abonos}}</strike></td>
                     @else
-                    <td class="sumas tarjeta">{{$fac->saldo_abonos}}</td>
+                    <td class="sumas  abono tarjeta">{{$fac->saldo_abonos}}</td>
                     @endif
 
                 @else
                     @if($fac->estado == 'Anulada')
                     <td><strike>{{$fac->saldo}}</strike></td>
                     @else
-                    <td class="sumas tarjeta">{{$fac->saldo}}</td>
+                    <td class="sumas abono tarjeta">{{$fac->saldo}}</td>
                     @endif
 
             @endif
@@ -105,7 +110,7 @@
                     @if($fac->estado == 'Anulada')
                     <td><strike>{{$fac->saldo_abonos}}</strike></td>
                     @else
-                    <td class="sumas">{{$fac->saldo_abonos}}</td>
+                    <td class="sumas abono">{{$fac->saldo_abonos}}</td>
                     @endif
 
 
@@ -113,7 +118,7 @@
                     @if($fac->estado == 'Anulada')
                     <td><strike>{{$fac->saldo}}</strike></td>
                     @else
-                    <td class="sumas">{{$fac->saldo}}</td>
+                    <td class="sumas abono">{{$fac->saldo}}</td>
                     @endif
 
             @endif
@@ -129,6 +134,13 @@
 
 
     </tbody>
+    <tfoot>
+        <tr>
+        <hr>
+            <td><strong>Total: </strong><strong id="totalAbonos"> </strong></td>
+            
+        </tr>
+    </tfoot>
 
 </table>
 
@@ -139,25 +151,15 @@
 
 
 <h2>Facturas nuevas</h2>
-
 <table class="table table-striped">
-
     <thead>
-
         <tr>
-
             <th>Factura número</th>
-
             <th>Detalle</th>
-
             <th>Valor</th>
-
             <th>Fecha</th>
-
         </tr>
-
     </thead>
-
     <tbody>
         @forelse ($facturasAbonos as $fac)
         <tr>
@@ -168,19 +170,19 @@
 
             @if($fac->metodo_pago === 'Tarjeta')
 
-            @if($fac->estado == 'Anulada')
-            <td><strike>{{$fac->abono}}</strike></td>
-            @else
-            <td class="sumas tarjeta">{{$fac->abono}}</td>
-            @endif
+                @if($fac->estado == 'Anulada')
+                    <td><strike>{{$fac->abono}}</strike></td>
+                @else
+                    <td class="facturaNueva sumas tarjeta">{{$fac->abono}}</td>
+                @endif
 
             @else
 
-            @if($fac->estado == 'Anulada')
-            <td><strike>{{$fac->abono}}</strike></td>
-            @else
-            <td class="sumas">{{$fac->abono}}</td>
-            @endif
+                @if($fac->estado == 'Anulada')
+                    <td><strike>{{$fac->abono}}</strike></td>
+                @else
+                    <td class="facturaNueva sumas">{{$fac->abono}}</td>
+                @endif
 
             @endif
 
@@ -189,26 +191,23 @@
             <td>{{$fac->created_at->format('Y-m-d')}}</td>
 
             @if($fac->estado == 'Anulada')
-            <td><strike>Factura anulada</strike></td>
+                <td><strike>Factura anulada</strike></td>
             
             @endif
 
-
-
         </tr>
-
         @empty
         <tr>
         </tr>
-
-
-
         @endforelse
-        
-
-
-
     </tbody>
+    <tfoot>
+        <tr>
+        <hr>
+            <td><strong>Total: </strong><strong id="totalFacturasNuevas"> </strong></td>
+            
+        </tr>
+    </tfoot>
 
 </table>
 
@@ -243,9 +242,9 @@
             <td>Garantía</td>
 
             @if(isset($fac->valor))
-            <td class="sumas">{{$fac->valor}}</td>
+            <td class="sumas garantia">{{$fac->valor}}</td>
             @else
-            <td class="sumas">0</td>
+            <td class="sumas garantia">0</td>
             @endif
 
 
@@ -263,6 +262,13 @@
 
 
     </tbody>
+    <tfoot>
+        <tr>
+        <hr>
+            <td><strong>Total: </strong><strong id="totalGarantias"> </strong></td>
+            
+        </tr>
+    </tfoot>
 
 </table>
 
@@ -300,7 +306,7 @@
 
             <td>{{$fac->concepto}}</td>
 
-            <td class="sumas">{{$fac->valor}}</td>
+            <td class="sumas recargo">{{$fac->valor}}</td>
 
             <td>{{$fac->created_at->format('Y-m-d')}}</td>
 
@@ -315,6 +321,13 @@
 
 
     </tbody>
+    <tfoot>
+        <tr>
+        <hr>
+            <td><strong>Total: </strong><strong id="totalRecargos"> </strong></td>
+            
+        </tr>
+    </tfoot>
 
 </table>
 
@@ -350,11 +363,11 @@
 
             @if($fac->metodo_pago == 'Tarjeta')
 
-            <td class="sumas tarjeta">{{$fac->valor}}</td>
+            <td class="sumas venta tarjeta">{{$fac->valor}}</td>
 
             @else
 
-            <td class="sumas">{{$fac->valor}}</td>
+            <td class="sumas venta">{{$fac->valor}}</td>
 
             @endif
 
@@ -373,6 +386,13 @@
 
 
     </tbody>
+    <tfoot>
+        <tr>
+        <hr>
+            <td><strong>Total: </strong><strong id="totalVentas"> </strong></td>
+            
+        </tr>
+    </tfoot>
 
 </table>
 
@@ -407,7 +427,7 @@
             <td>Préstamo de producto: {{$fac->producto->nombre}} - ({{$fac->producto->referencia}})</td>
 
 
-            <td class="sumas">{{$fac->valor}}</td>
+            <td class="sumas prestamo">{{$fac->valor}}</td>
 
 
             <td>{{$fac->fecha}}</td>
@@ -423,6 +443,13 @@
 
 
     </tbody>
+    <tfoot>
+        <tr>
+        <hr>
+            <td><strong>Total: </strong><strong id="totalPrestamos"> </strong></td>
+            
+        </tr>
+    </tfoot>
 
 </table>
 
@@ -458,7 +485,7 @@
 
             <td>Ingreso de base</td>
 
-            <td class="sumas base">{{$fac->valor}}</td>
+            <td class="sumas base basesuma">{{$fac->valor}}</td>
 
             <td>{{$fac->fecha}}</td>
 
@@ -473,6 +500,13 @@
 
 
     </tbody>
+    <tfoot>
+        <tr>
+        <hr>
+            <td><strong>Total: </strong><strong id="totalBases"> </strong></td>
+            
+        </tr>
+    </tfoot>
 
 </table>
 
@@ -512,7 +546,7 @@
             <td>Ingreso a caja</td>
             <td>{{$fac->concepto}}</td>
 
-            <td class="sumas">{{$fac->valor}}</td>
+            <td class="sumas abonoCaja">{{$fac->valor}}</td>
 
             <td>{{$fac->fecha}}</td>
 
@@ -527,6 +561,13 @@
 
 
     </tbody>
+    <tfoot>
+        <tr>
+        <hr>
+            <td><strong>Total: </strong><strong id="totalAbonosCaja"> </strong></td>
+            
+        </tr>
+    </tfoot>
 
 </table>
 
@@ -563,10 +604,10 @@
 
             @if($fac->metodo_pago == 'Tarjeta')
 
-            <td class="sumas tarjeta">{{$fac->valor}}</td>
+            <td class="sumas daño tarjeta">{{$fac->valor}}</td>
 
             @else
-            <td class="sumas">{{$fac->valor}}</td>
+            <td class="sumas daño">{{$fac->valor}}</td>
             @endif
 
             <td>{{$fac->created_at->format('Y-m-d')}}</td>
@@ -582,6 +623,13 @@
 
 
     </tbody>
+    <tfoot>
+        <tr>
+        <hr>
+            <td><strong>Total: </strong><strong id="totalDaños"> </strong></td>
+            
+        </tr>
+    </tfoot>
 
 </table>
 
@@ -619,7 +667,7 @@
 
             <td>{{$fac->concepto}}</td>
 
-            <td class="restas">- {{$fac->valor}}</td>
+            <td class="restas resta">- {{$fac->valor}}</td>
 
             <td>{{$fac->created_at->format('Y-m-d')}}</td>
 
@@ -638,6 +686,13 @@
 
 
     </tbody>
+    <tfoot>
+        <tr>
+        <hr>
+            <td><strong>Total: </strong><strong id="totalRestas"> </strong></td>
+            
+        </tr>
+    </tfoot>
 
 </table>
 
