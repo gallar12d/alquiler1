@@ -482,7 +482,7 @@
 
 <hr>
 
-<h2>Abonos a caja</h2>
+<h2>Ingreso a caja</h2>
 
 <table class="table table-striped">
 
@@ -509,7 +509,7 @@
 
 
 
-            <td>Abono a caja</td>
+            <td>Ingreso a caja</td>
             <td>{{$fac->concepto}}</td>
 
             <td class="sumas">{{$fac->valor}}</td>

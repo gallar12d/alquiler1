@@ -79,7 +79,7 @@
                                         <a href="{{url('/base')}}">Base</a>
                                         @endif
                                         
-                                          <a href="{{url('/abonocaja')}}">Abonos a caja</a>
+                                          <a href="{{url('/abonocaja')}}">Ingreso a caja</a>
 
                                     </li>
                                 </ul>
