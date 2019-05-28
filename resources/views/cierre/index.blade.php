@@ -132,7 +132,8 @@
                
 
 
-
+                
+                $('#totalIngresos').text(sumas+' Pesos');
                 $('#total').text(total+' Pesos');
 
                 
@@ -327,6 +328,8 @@ function totalRestas(){
     }
    
     $('#totalRestas').text(suma);
+    $('#totalGastos').text(suma +' Pesos');
+    
 }
 
 

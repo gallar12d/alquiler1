@@ -698,9 +698,19 @@
 
 <div class="row" style ="border: 2px solid">
     <div class="col-md-3">
-        <h3>Total Ventas</h3>
+        <h3>Total Ventas (sin base)</h3>
 
         <span id="totalventas"></span>
+    </div>
+    <div class="col-md-3">
+        <h3>Total Ingresos</h3>
+
+        <span id="totalIngresos"></span>
+    </div>
+    <div class="col-md-3">
+        <h3>Total Gastos</h3>
+
+        <span id="totalGastos"></span>
     </div>
     <div class="col-md-3">
         <h3>Total Efectivo</h3>
@@ -708,12 +718,12 @@
         <span id="totalEfectivo"></span>
     </div>
     <div class="col-md-3">
-        <h3>Total Tarjeta</h3>
+        <h3>Bancos</h3>
 
         <span id="totalTarjeta"></span>
     </div>
     <div class="col-md-3">
-        <h3>Total Neto </h3>
+        <h3>Total Neto (Con base) </h3>
 
         <span id="total"></span>
     </div>
