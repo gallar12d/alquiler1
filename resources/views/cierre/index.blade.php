@@ -129,11 +129,12 @@
                 var total = sumas - resta;
 
                 
-                total2 = total;
+                total2 = sumas;
                
 
 
-
+                
+                $('#totalIngresos').text(sumas+' Pesos');
                 $('#total').text(total+' Pesos');
 
                 
@@ -190,6 +191,9 @@
                     
 
                 }
+                var totalSinBase = total - sumasBase
+
+                $('#total2').text(totalSinBase+' Pesos');
 
                 
 
@@ -360,6 +364,8 @@ function totalRestas(){
    
     $('#totalRestas').text(suma);
     $('#totalRestas2').text(suma);
+    $('#totalGastos').text(suma +' Pesos');
+    
 }
 
 
