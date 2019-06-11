@@ -87,6 +87,7 @@
             totalBases();
             totalAbonosCaja();
             totalRestas();
+            totalAbonosFacnuevas();
 
             // realizar cálculos
             var elementossuma = $('.sumas');
@@ -219,6 +220,7 @@ function totalFacturasNuevas(){
     }
    
     $('#totalFacturasNuevas').text(suma);
+    $('#totalFacturasNuevas2').text(suma);
 }
 function totalAbonos(){
     var elementos = $('.abono');
@@ -231,6 +233,34 @@ function totalAbonos(){
     }
    
     $('#totalAbonos').text(suma);
+    $('#totalAbonos2').text(suma);
+}
+function totalAbonosFacnuevas(){
+    var elementos1 = $('.facturaNueva');
+    var suma1 = 0;
+    if(elementos1.length){
+        $.each(elementos1, function(k,v){
+            var valor = $(v).text();
+            suma1 = parseInt(suma1) + parseInt(valor);
+        });
+    }
+   
+    
+    var elementos2 = $('.abono');
+    var suma2 = 0;
+    if(elementos2.length){
+        $.each(elementos2, function(k,v){
+            var valor = $(v).text();
+            suma2 = parseInt(suma2) + parseInt(valor);
+        });
+    }
+
+    var sumatotal = suma1 + suma2
+   
+   
+    $('#totalAbonosFacturas').text(sumatotal);
+    
+
 }
 function totalGarantias(){
     var elementos = $('.garantia');
@@ -303,6 +333,8 @@ function totalBases(){
     }
    
     $('#totalBases').text(suma);
+    $('#totalBases2').text(suma);
+    
 }
 function totalAbonosCaja(){
     var elementos = $('.abonoCaja');
@@ -327,6 +359,7 @@ function totalRestas(){
     }
    
     $('#totalRestas').text(suma);
+    $('#totalRestas2').text(suma);
 }
 
 

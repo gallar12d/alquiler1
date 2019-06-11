@@ -720,6 +720,39 @@
 
 </div>
 <br>
+<div class="row" style ="border: 2px solid">
+    <div class="col-md-4">
+        <h3>Total Facturas nuevas</h3>
+
+        <span id="totalFacturasNuevas2"></span> <span> Pesos</span>
+    </div>
+    <div class="col-md-4">
+        <h3>Total abonos</h3>
+
+        <span id="totalAbonos2"></span> <span> Pesos</span>
+    </div>
+    <div class="col-md-4">
+        <h3>Total facturas nuevas + abonos</h3>
+
+        <span id="totalAbonosFacturas"></span> <span> Pesos</span>
+    </div>
+    <div class="col-md-4">
+        <h3>Total Base </h3>
+
+        <span id="totalBases2"></span> <span> Pesos</span>
+    </div>
+    <div class="col-md-4">
+        <h3>Total gastos </h3>
+
+        <span id="totalRestas2"></span><span> Pesos</span>
+    </div>
+    <div class="col-md-4">
+        <h3>Total custodia </h3>
+
+        <span id="totalCustodia">{{$custodia->valor}}</span> <span> Pesos</span>
+    </div>
+
+</div>
 
 <hr>
 

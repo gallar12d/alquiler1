@@ -12,6 +12,7 @@ use App\Novedad;
 use App\Base;
 use App\Abonocaja;
 use App\Abono;
+use App\Custodia;
 
 use App\PrestamoProducto;
 use Illuminate\Http\Request;
@@ -83,7 +84,9 @@ class CierreController extends Controller {
                         ->where('fecha', '<=', $fechaFin)->get();
           
           $abonosCompromiso = Abono::where('fecha', '>=', $fechaInicio)
-                        ->where('fecha', '<=', $fechaFin)->get();
+                        ->where('fecha', '<=', $fechaFin)->get();            
+            
+          $custodia = Custodia::find(1);
 
 
 
@@ -93,7 +96,7 @@ class CierreController extends Controller {
 
 
 
-        return view('cierre.generado', compact('totalFacturasAbonos','abonosCompromiso', 'abonoscaja','bases', 'prestamos', 'ventas', 'novedades', 'facturasAbonos', 'facturasSaldos', 'garantias', 'recargos', 'danios', 'salidas'));
+        return view('cierre.generado', compact('custodia','totalFacturasAbonos','abonosCompromiso', 'abonoscaja','bases', 'prestamos', 'ventas', 'novedades', 'facturasAbonos', 'facturasSaldos', 'garantias', 'recargos', 'danios', 'salidas'));
     }
 
     /**
